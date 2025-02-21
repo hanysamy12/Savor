@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rounded_rounded"
+    android:backgroundTint="@color/background_color">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".mealdetails.view.MealDetailsFragment">
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:constraint_referenced_ids="txtInstructions"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="20dp" />
+
+        <ImageView
+            android:id="@+id/imageMealDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtMealNameMealDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/card_text_background"
+            android:gravity="center"
+            android:paddingVertical="10dp"
+            android:textColor="@color/secondary_color"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toStartOf="@id/guideline8"
+            app:layout_constraintStart_toEndOf="@id/guideline7"
+            app:layout_constraintTop_toBottomOf="@id/imageMealDetails" />
+
+
+        <TextView
+            android:id="@+id/txtAreaMealDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingHorizontal="5dp"
+            android:textSize="18sp"
+            android:backgroundTint="@color/edit_text_background"
+            android:background="@drawable/bg_rounded_rounded"
+            app:layout_constraintEnd_toStartOf="@id/txtCategoryMealDetails"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtMealNameMealDetails" />
+
+        <TextView
+            android:id="@+id/txtCategoryMealDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:backgroundTint="@color/edit_text_background"
+            android:paddingHorizontal="5dp"
+            android:background="@drawable/bg_rounded_rounded"
+            app:layout_constraintEnd_toStartOf="@id/guideline8"
+            app:layout_constraintStart_toEndOf="@+id/txtAreaMealDetails"
+            app:layout_constraintTop_toTopOf="@+id/txtAreaMealDetails" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewIngredientMealDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            tools:listitem="@layout/intem_list_ingredient_meal_details"
+            app:layout_constraintEnd_toStartOf="@id/guideline8"
+            app:layout_constraintStart_toStartOf="@id/guideline7"
+            app:layout_constraintTop_toBottomOf="@id/txtCategoryMealDetails" />
+
+        <TextView
+            android:id="@+id/labelInstructions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/instructions"
+            android:textSize="22sp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/secondary_color"
+            app:layout_constraintStart_toEndOf="@id/guideline7"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewIngredientMealDetails"
+            tools:layout_editor_absoluteX="124dp"
+            tools:layout_editor_absoluteY="457dp"
+
+
+            />
+
+        <TextView
+            android:id="@+id/txtInstructions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@id/guideline8"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/guideline7"
+            app:layout_constraintTop_toBottomOf="@id/labelInstructions" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrierInstructions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="txtInstructions" />
+
+        <VideoView
+            android:id="@+id/videoViewMealDetails"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBaseline_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline8"
+            app:layout_constraintStart_toEndOf="@id/guideline7"
+            app:layout_constraintTop_toBottomOf="@id/txtInstructions" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

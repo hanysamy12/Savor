@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "318047228197",
+    "project_id": "savor-9b48d",
+    "storage_bucket": "savor-9b48d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318047228197:android:e379e1c14609db701acacc",
+        "android_client_info": {
+          "package_name": "com.example.savor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDanLP-KCacQ-3omY6wdxGsYXVjiMNtuBI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
