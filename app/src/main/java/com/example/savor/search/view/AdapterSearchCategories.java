@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.savor.R;
+import com.example.savor.database.MealsLocalDataSource;
 import com.example.savor.remote.model.MealsRemoteDataSource;
 import com.example.savor.remote.model.MealsRepositoryImp;
 import com.example.savor.remote.model.pojo.CategoriesItem;
@@ -50,7 +51,7 @@ SearchFragmentContract searchFragmentContract;
                         .placeholder(R.drawable.ic_app)
                         .error(R.drawable.ic_app)).into(holder.imgCategory);
         holder.imgCategory.setOnClickListener(view -> {
-            searchPresenterImp = new SearchPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance()),searchFragmentContract);
+            searchPresenterImp = new SearchPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(context)),searchFragmentContract);
             searchPresenterImp.getFilteredMealsByCategory(categories.get(position).getStrCategory());
         });
     }

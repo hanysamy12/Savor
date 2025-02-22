@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -49,7 +50,10 @@ public class AdapterHomeList extends RecyclerView.Adapter<AdapterHomeList.ViewHo
                         .fitCenter()
                         .placeholder(R.drawable.ic_app)
                         .error(R.drawable.ic_app)).into(holder.imgMealListHome);
-
+        holder.imgMealListHome.setOnClickListener(view -> {
+            HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(meals.get(position).getIdMeal());
+            Navigation.findNavController(view).navigate(action);
+        });
     }
 
     @Override

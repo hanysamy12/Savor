@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.savor.R;
+import com.example.savor.database.MealsLocalDataSource;
 import com.example.savor.homepage.presenter.HomeScreenContract;
 import com.example.savor.homepage.presenter.HomeScreenPresenterImp;
 import com.example.savor.remote.model.MealsRemoteDataSource;
@@ -54,9 +56,11 @@ public class HomeFragment extends Fragment implements HomeScreenContract {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerViewHome.setLayoutManager(layoutManager);
-        homeScreenPresenterImp = new HomeScreenPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance()),this);
-        //homeScreenPresenterImp.getRandomMeal();
-       // homeScreenPresenterImp.getHomeMeals();
+        homeScreenPresenterImp = new HomeScreenPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(requireContext()))
+                ,this);
+        homeScreenPresenterImp.getRandomMeal();
+        homeScreenPresenterImp.getHomeMeals();
+
 
     }
 
@@ -70,7 +74,10 @@ public class HomeFragment extends Fragment implements HomeScreenContract {
                         .fitCenter()
                         .placeholder(R.drawable.ic_launcher_background)
                         .error(R.drawable.ic_launcher_foreground)).into( imgRandomMeal);
-
+        imgRandomMeal.setOnClickListener(view -> {
+            HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealsItemResponse.getMeals().get(0).getIdMeal());
+            Navigation.findNavController(view).navigate(action);
+        });
     }
 
     @Override

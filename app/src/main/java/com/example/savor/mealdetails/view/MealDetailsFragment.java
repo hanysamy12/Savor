@@ -20,6 +20,7 @@ import android.widget.VideoView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.savor.R;
+import com.example.savor.database.MealsLocalDataSource;
 import com.example.savor.mealdetails.presenter.MealDetailsFragmentContract;
 import com.example.savor.mealdetails.presenter.MealDetailsPresenterImp;
 import com.example.savor.remote.model.MealsRemoteDataSource;
@@ -32,17 +33,22 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
     private static final String TAG = "MealDetailsFragment";
     MealDetailsPresenterImp mealDetailsPresenterImp;
     ImageView imgMeal;
+    ImageView imgAddToFav;
+    ImageView imgAddToPlan;
     TextView txtMealName;
     TextView txtCountry;
     TextView txtCategory;
     TextView txtInstructions;
     VideoView videoView;
     RecyclerView recyclerViewIngredient;
-
+String  mealId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        mealId = MealDetailsFragmentArgs.fromBundle(getArguments()).getMealId();
+        Log.i(TAG, "onCreateView: MealId"+mealId);
         return inflater.inflate(R.layout.fragment_meal_details, container, false);
     }
 
@@ -50,6 +56,8 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         imgMeal = view.findViewById(R.id.imageMealDetails);
+        imgAddToFav = view.findViewById(R.id.imgAddToFav);
+        imgAddToPlan = view.findViewById(R.id.imgToPlan);
         txtMealName=view.findViewById(R.id.txtMealNameMealDetails);
         txtCategory = view.findViewById(R.id.txtCategoryMealDetails);
         txtCountry = view.findViewById(R.id.txtAreaMealDetails);
@@ -58,9 +66,9 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
         recyclerViewIngredient = view.findViewById(R.id.recyclerViewIngredientMealDetails);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL,false);
         recyclerViewIngredient.setLayoutManager(layoutManager);
-        mealDetailsPresenterImp = new MealDetailsPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance()),this);
-        mealDetailsPresenterImp.getMealById(52812);
-
+        mealDetailsPresenterImp = new MealDetailsPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(requireContext()))
+                ,this);
+        mealDetailsPresenterImp.getMealById(Integer.valueOf(mealId));
 
     }
 
@@ -75,11 +83,15 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
                         .fitCenter()
                         .placeholder(R.drawable.ic_app)
                         .error(R.drawable.ic_app)).into(imgMeal);
-
         AdapterIngredientMealDetails adapterIngredientMealDetails= new AdapterIngredientMealDetails(requireContext(),ingredientList,measureList,this);
         recyclerViewIngredient.setAdapter(adapterIngredientMealDetails);
-        Log.i(TAG, "showIng: "+ingredientList);
-        Log.i(TAG, "showMeg: "+measureList);
+        /*Log.i(TAG, "showIng: "+ingredientList);
+        Log.i(TAG, "showMeg: "+measureList);*/
+        imgAddToFav.setOnClickListener(view1 -> {
+            mealDetailsPresenterImp.addToFavorite(mealsItem);
+            Log.i(TAG, "ShowMealDetailsClick: "+mealsItem.getStrMeal());
+        });
+
     }
 
     @Override

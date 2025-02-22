@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mealDetailsFragment">
+    app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.savor.splash.view.SplashFragment"
@@ -38,10 +38,14 @@
         android:id="@+id/homeFragment"
         android:name="com.example.savor.homepage.view.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.example.savor.favorite.view.FavoriteFragment"
+        android:name="com.example.savor.favorite.view.view.FavoriteFragment"
         android:label="Favorites"
         tools:layout="@layout/fragment_favorite" />
     <fragment
@@ -53,9 +57,17 @@
         android:id="@+id/searchFragment"
         android:name="com.example.savor.search.view.SearchFragment"
         android:label="search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/mealDetailsFragment"
         android:name="com.example.savor.mealdetails.view.MealDetailsFragment"
-        android:label="MealDetailsFragment" />
+        android:label="MealDetailsFragment" >
+        <argument
+            android:name="mealId"
+            app:argType="string" />
+    </fragment>
 </navigation>

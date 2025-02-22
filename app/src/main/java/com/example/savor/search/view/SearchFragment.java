@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.example.savor.R;
+import com.example.savor.database.MealsLocalDataSource;
 import com.example.savor.remote.model.MealsRemoteDataSource;
 import com.example.savor.remote.model.MealsRepositoryImp;
 import com.example.savor.remote.model.pojo.AreaResponse;
@@ -59,7 +60,7 @@ public class SearchFragment extends Fragment implements SearchFragmentContract {
         recyclerView = view.findViewById(R.id.searchRecyclerView);
         layoutManager = new GridLayoutManager(requireContext(), 2, VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        searchPresenter = new SearchPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance()), this);
+        searchPresenter = new SearchPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(requireContext())), this);
         searchPresenter.getAllCategories();
         chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (!checkedIds.isEmpty()) {
