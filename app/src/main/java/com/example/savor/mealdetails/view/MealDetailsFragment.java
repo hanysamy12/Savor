@@ -1,5 +1,6 @@
 package com.example.savor.mealdetails.view;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,11 +8,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Dao;
+import androidx.room.Database;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +31,7 @@ import com.example.savor.remote.model.MealsRemoteDataSource;
 import com.example.savor.remote.model.MealsRepositoryImp;
 import com.example.savor.remote.model.pojo.MealsItem;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class MealDetailsFragment extends Fragment implements MealDetailsFragmentContract {
@@ -41,14 +46,15 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
     TextView txtInstructions;
     VideoView videoView;
     RecyclerView recyclerViewIngredient;
-String  mealId;
+    String mealId; //from Saved Argus
+    MealsItem mealItem; //from showMealDetails
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
         mealId = MealDetailsFragmentArgs.fromBundle(getArguments()).getMealId();
-        Log.i(TAG, "onCreateView: MealId"+mealId);
+       // Log.i(TAG, "onCreateView: MealId" + mealId);
         return inflater.inflate(R.layout.fragment_meal_details, container, false);
     }
 
@@ -58,22 +64,25 @@ String  mealId;
         imgMeal = view.findViewById(R.id.imageMealDetails);
         imgAddToFav = view.findViewById(R.id.imgAddToFav);
         imgAddToPlan = view.findViewById(R.id.imgToPlan);
-        txtMealName=view.findViewById(R.id.txtMealNameMealDetails);
+        txtMealName = view.findViewById(R.id.txtMealNameMealDetails);
         txtCategory = view.findViewById(R.id.txtCategoryMealDetails);
         txtCountry = view.findViewById(R.id.txtAreaMealDetails);
         txtInstructions = view.findViewById(R.id.txtInstructions);
         videoView = view.findViewById(R.id.videoViewMealDetails);
         recyclerViewIngredient = view.findViewById(R.id.recyclerViewIngredientMealDetails);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL,false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false);
         recyclerViewIngredient.setLayoutManager(layoutManager);
         mealDetailsPresenterImp = new MealDetailsPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(requireContext()))
-                ,this);
+                , this);
         mealDetailsPresenterImp.getMealById(Integer.valueOf(mealId));
-
+        imgAddToPlan.setOnClickListener(view1 -> {
+            showDatePicker();
+        });
     }
 
     @Override
-    public void showMealDetails(MealsItem mealsItem , List<String>ingredientList,List<String> measureList) {
+    public void showMealDetails(MealsItem mealsItem, List<String> ingredientList, List<String> measureList) {
+        this.mealItem = mealsItem;
         txtMealName.setText(mealsItem.getStrMeal());
         txtCountry.setText(mealsItem.getStrArea());
         txtCategory.setText(mealsItem.getStrCategory());
@@ -83,13 +92,12 @@ String  mealId;
                         .fitCenter()
                         .placeholder(R.drawable.ic_app)
                         .error(R.drawable.ic_app)).into(imgMeal);
-        AdapterIngredientMealDetails adapterIngredientMealDetails= new AdapterIngredientMealDetails(requireContext(),ingredientList,measureList,this);
+        AdapterIngredientMealDetails adapterIngredientMealDetails = new AdapterIngredientMealDetails(requireContext(), ingredientList, measureList, this);
         recyclerViewIngredient.setAdapter(adapterIngredientMealDetails);
-        /*Log.i(TAG, "showIng: "+ingredientList);
-        Log.i(TAG, "showMeg: "+measureList);*/
+
         imgAddToFav.setOnClickListener(view1 -> {
             mealDetailsPresenterImp.addToFavorite(mealsItem);
-            Log.i(TAG, "ShowMealDetailsClick: "+mealsItem.getStrMeal());
+            Toast.makeText(requireContext(), "Added", Toast.LENGTH_LONG).show();
         });
 
     }
@@ -97,6 +105,26 @@ String  mealId;
     @Override
     public void showError(String errorMsg) {
         Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                requireContext(),
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                    Log.i(TAG, "Selected Date: " + selectedDate);
+                    mealItem.setDate(selectedDate);
+                    mealDetailsPresenterImp.addToPlan(mealItem);
+                    Toast.makeText(requireContext(), selectedDate, Toast.LENGTH_SHORT).show();
+                }, year, month, day);//set today as default
+        datePickerDialog.show();
+        DatePicker datePicker=datePickerDialog.getDatePicker();
+        datePicker.setMinDate(calendar.getTimeInMillis());
     }
 
 }

@@ -72,17 +72,34 @@ public class MealsRepositoryImp implements MealsRepositoryInterface {
     @Override
     public void addFavoriteMeal(MealsItem mealsItem) {
         Log.i(TAG, "addFavoriteMeal: ");
+        mealsItem.setFavorite(true);
         mealsLocalDataSource.getMealsItemDao().insertMeal(mealsItem);
     }
 
     @Override
-    public void deleteMealFromFavorite(MealsItem mealsItem) {
-        mealsLocalDataSource.getMealsItemDao().deleteMeal(mealsItem);
+    public void deleteMealFromFavorite(String id) {
+        mealsLocalDataSource.getMealsItemDao().deleteMeal(id);
     }
 
     @Override
     public LiveData<List<MealsItem>> getFavoriteMeals() {
         return mealsLocalDataSource.getMealsItemDao().getMeals();
     }
+
+    @Override
+    public void addPlanMeal(MealsItem mealsItem) {
+        mealsLocalDataSource.getMealsItemDao().insertMeal(mealsItem);
+    }
+
+    @Override
+    public void deleteMealFromPlan(String id) {
+        mealsLocalDataSource.getMealsItemDao().deleteMealPlan(id);
+    }
+
+    @Override
+    public LiveData<List<MealsItem>> getPlaneMeals() {
+        return mealsLocalDataSource.getMealsItemDao().getMealsPlan();
+    }
+
 
 }

@@ -11,6 +11,16 @@ public class MealsItem {
     private Object strImageSource;
     private String date;
 
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    private boolean isFavorite;
+
     public void setStrDrinkAlternate(Object strDrinkAlternate) {
         this.strDrinkAlternate = strDrinkAlternate;
     }

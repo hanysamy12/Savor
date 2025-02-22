@@ -15,16 +15,19 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.savor.R;
 import com.example.savor.remote.model.pojo.MealsFilteredItem;
+import com.example.savor.search.presenter.OnClickMealListener;
 
 import java.util.List;
 
 public class AdapterSearchMeals extends RecyclerView.Adapter<AdapterSearchMeals.ViewHolder>{
 Context context;
+OnClickMealListener listener;
 List<MealsFilteredItem> mealsFilteredItems;
 
-    public AdapterSearchMeals(Context context, List<MealsFilteredItem> mealsFilteredItems) {
+    public AdapterSearchMeals(Context context, List<MealsFilteredItem> mealsFilteredItems,OnClickMealListener listener) {
         this.context = context;
         this.mealsFilteredItems = mealsFilteredItems;
+        this.listener = listener;
     }
 
     @NonNull
@@ -44,6 +47,9 @@ List<MealsFilteredItem> mealsFilteredItems;
                         .placeholder(R.drawable.ic_app)
                         .error(R.drawable.ic_app)).into(holder.imgMeal);
 
+        holder.imgMeal.setOnClickListener(view -> {
+            listener.onClickListener(mealsFilteredItems.get(position).getIdMeal());
+        });
     }
 
     @Override

@@ -9,5 +9,6 @@ import java.util.List;
 public interface MealDetailsPresenter {
     void getMealById(Integer mealId);
     void addToFavorite(MealsItem mealsItem);
+    void addToPlan(MealsItem mealsItem);
     //LiveData<List<MealsItem>> getFavoriteMeals();
 }

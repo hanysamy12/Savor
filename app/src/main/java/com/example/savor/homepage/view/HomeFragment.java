@@ -25,9 +25,10 @@ import com.example.savor.homepage.presenter.HomeScreenPresenterImp;
 import com.example.savor.remote.model.MealsRemoteDataSource;
 import com.example.savor.remote.model.MealsRepositoryImp;
 import com.example.savor.remote.model.pojo.MealsItemResponse;
+import com.example.savor.search.presenter.OnClickMealListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class HomeFragment extends Fragment implements HomeScreenContract {
+public class HomeFragment extends Fragment implements HomeScreenContract , OnClickMealListener {
     HomeScreenPresenterImp homeScreenPresenterImp;
     BottomNavigationView bottomNavigationView;
     ImageView imgRandomMeal;
@@ -88,7 +89,13 @@ public class HomeFragment extends Fragment implements HomeScreenContract {
     @Override
     public void showHomeMeals(MealsItemResponse mealsItemResponse) {
         Log.i(TAG, "showHomeMeals: "+mealsItemResponse.getMeals().get(2).getStrMeal());
-        adapterHomeList  = new AdapterHomeList(requireContext(),mealsItemResponse.getMeals());
+        adapterHomeList  = new AdapterHomeList(requireContext(),mealsItemResponse.getMeals(),this);
         recyclerViewHome.setAdapter(adapterHomeList);
+    }
+
+    @Override
+    public void onClickListener(String mealId) {
+        HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealId);
+        Navigation.findNavController(requireView()).navigate(action);
     }
 }

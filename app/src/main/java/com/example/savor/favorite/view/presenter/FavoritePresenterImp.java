@@ -1,7 +1,6 @@
 package com.example.savor.favorite.view.presenter;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
 
 import com.example.savor.remote.model.MealsRepositoryImp;
 import com.example.savor.remote.model.pojo.MealsItem;
@@ -25,7 +24,7 @@ public class FavoritePresenterImp implements FavoriteFragmentPresenter{
     @Override
     public void deleteFromFavorite(MealsItem mealsItem) {
         new Thread(() -> {
-            mealsRepositoryImp.deleteMealFromFavorite(mealsItem);
+            mealsRepositoryImp.deleteMealFromFavorite(mealsItem.getIdMeal());
         }).start();
 
     }

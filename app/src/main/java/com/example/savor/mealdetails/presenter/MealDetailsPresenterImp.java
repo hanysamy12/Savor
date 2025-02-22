@@ -54,11 +54,18 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
 
     @Override
     public void addToFavorite(MealsItem mealsItem) {
-        Log.i(TAG, "addToFavoritePresrnter: "+mealsItem);
 
         new Thread(() -> {
             Log.i(TAG, "addToFavorite: Thread");
             mealsRepositoryImp.addFavoriteMeal(mealsItem);
+        }).start();
+    }
+
+    @Override
+    public void addToPlan(MealsItem mealsItem) {
+        new Thread(() -> {
+            Log.i(TAG, "addToPlan: Thread");
+            mealsRepositoryImp.addPlanMeal(mealsItem);
         }).start();
     }
 

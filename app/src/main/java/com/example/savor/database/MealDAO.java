@@ -13,13 +13,18 @@ import java.util.List;
 
 @Dao
 public interface MealDAO {
-    @Query("Select * from MealsItem")
+    @Query("Select * from MealsItem where isFavorite not null")
     LiveData<List<MealsItem>> getMeals();
 
+    @Query("Select * from MealsItem where date not null")
+    LiveData<List<MealsItem>> getMealsPlan();
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMeal(MealsItem mealsItem);
 
-    @Delete
-    void deleteMeal(MealsItem mealsItem);
+    @Query("delete from MealsItem where date is null and idMeal = :id")
+    void deleteMeal(String id);
+
+    @Query("delete from MealsItem where isFavorite is null and idMeal = :id")
+    void deleteMealPlan(String id);
 }

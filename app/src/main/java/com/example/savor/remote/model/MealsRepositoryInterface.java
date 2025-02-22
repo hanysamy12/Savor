@@ -22,8 +22,11 @@ public interface MealsRepositoryInterface {
     void filterByIngredient(String ingredientName, MealsCallBack<FilteredResponse>mealsCallBack);
     void filterCountry(String countryName, MealsCallBack<FilteredResponse>mealsCallBack);
     void addFavoriteMeal(MealsItem mealsItem);
-    void deleteMealFromFavorite(MealsItem mealsItem);
+    void deleteMealFromFavorite(String id);
     LiveData<List<MealsItem>> getFavoriteMeals();
+    void addPlanMeal(MealsItem mealsItem);
+    void deleteMealFromPlan(String id);
+    LiveData<List<MealsItem>> getPlaneMeals();
 
 
 }
