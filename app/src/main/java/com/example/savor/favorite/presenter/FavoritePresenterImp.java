@@ -1,4 +1,4 @@
-package com.example.savor.favorite.view.presenter;
+package com.example.savor.favorite.presenter;
 
 import androidx.lifecycle.LiveData;
 
@@ -17,14 +17,14 @@ public class FavoritePresenterImp implements FavoriteFragmentPresenter{
     }
 
     @Override
-    public LiveData<List<MealsItem>> showFavorite(String userId) {
+    public LiveData<List<MealsItem>> showMeals() {
         return mealsRepositoryImp.getFavoriteMeals();
     }
 
     @Override
-    public void deleteFromFavorite(MealsItem mealsItem) {
+    public void deleteMeal(String id) {
         new Thread(() -> {
-            mealsRepositoryImp.deleteMealFromFavorite(mealsItem.getIdMeal());
+            mealsRepositoryImp.deleteMealFromFavorite(id);
         }).start();
 
     }

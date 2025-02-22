@@ -83,7 +83,7 @@ public class MealsRepositoryImp implements MealsRepositoryInterface {
 
     @Override
     public LiveData<List<MealsItem>> getFavoriteMeals() {
-        return mealsLocalDataSource.getMealsItemDao().getMeals();
+        return mealsLocalDataSource.getMealsItemDao().getMealsFavorite();
     }
 
     @Override
@@ -94,6 +94,7 @@ public class MealsRepositoryImp implements MealsRepositoryInterface {
     @Override
     public void deleteMealFromPlan(String id) {
         mealsLocalDataSource.getMealsItemDao().deleteMealPlan(id);
+        Log.i(TAG, "deleteMealFromPlan: ");
     }
 
     @Override

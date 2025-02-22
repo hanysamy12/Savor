@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="@color/background_color"
     android:background="@drawable/bg_rounded_rounded"
-    tools:context=".favorite.view.view.FavoriteFragment">
+    tools:context=".favorite.view.FavoriteFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewFavorite"

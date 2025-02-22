@@ -1,4 +1,4 @@
-package com.example.savor.favorite.view.view;
+package com.example.savor.favorite.view;
 
 import android.os.Bundle;
 
@@ -17,9 +17,9 @@ import android.view.ViewGroup;
 
 import com.example.savor.R;
 import com.example.savor.database.MealsLocalDataSource;
-import com.example.savor.favorite.view.presenter.FavoriteFragmentContract;
-import com.example.savor.favorite.view.presenter.FavoritePresenterImp;
-import com.example.savor.favorite.view.presenter.OnClickListener;
+import com.example.savor.favorite.presenter.FavoriteFragmentContract;
+import com.example.savor.favorite.presenter.FavoritePresenterImp;
+import com.example.savor.favorite.presenter.OnClickListener;
 import com.example.savor.remote.model.MealsRemoteDataSource;
 import com.example.savor.remote.model.MealsRepositoryImp;
 import com.example.savor.remote.model.pojo.MealsItem;
@@ -49,20 +49,16 @@ public class FavoriteFragment extends Fragment implements FavoriteFragmentContra
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        LiveData<List<MealsItem>> liveMealItemList = favoritePresenterImp.showFavorite("1");
+        LiveData<List<MealsItem>> liveMealItemList = favoritePresenterImp.showMeals();
         adapterFavorite = new AdapterFavorite(requireContext(), new ArrayList<>(),this);
-       recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapterFavorite);
         liveMealItemList.observe((LifecycleOwner) requireContext(), mealsItemList -> {
-            adapterFavorite.setMealsFavoriteList(mealsItemList);
+            adapterFavorite.setMealsIteList(mealsItemList);
             Log.i(TAG, "FavoriteFragment: "+mealsItemList.size());
         });
     }
 
-    @Override
-    public void showFavoriteMeals(List<MealsItem> mealsItemList) {
-
-    }
 
     @Override
     public void showSuccessMsg(String successMsg) {
@@ -75,7 +71,7 @@ public class FavoriteFragment extends Fragment implements FavoriteFragmentContra
     }
 
     @Override
-    public void onFavoriteClicked(MealsItem mealsItem) {
-        favoritePresenterImp.deleteFromFavorite(mealsItem);
+    public void onDeleteClicked(String id) {
+        favoritePresenterImp.deleteMeal(id);
     }
 }

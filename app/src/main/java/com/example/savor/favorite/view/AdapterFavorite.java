@@ -1,4 +1,4 @@
-package com.example.savor.favorite.view.view;
+package com.example.savor.favorite.view;
 
 import android.content.Context;
 import android.util.Log;
@@ -15,24 +15,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.savor.R;
-import com.example.savor.favorite.view.presenter.OnClickListener;
+import com.example.savor.favorite.presenter.OnClickListener;
 import com.example.savor.remote.model.pojo.MealsItem;
 
 import java.util.List;
 
 public class AdapterFavorite extends RecyclerView.Adapter<AdapterFavorite.ViewHolder> {
     Context context;
-    List<MealsItem> mealsFavoriteList;
+    List<MealsItem> mealsIteList;
     OnClickListener listener;
     private static final String TAG = "AdapterFavorite";
     public AdapterFavorite(Context context, List<MealsItem> mealsFavoriteList,OnClickListener listener) {
         this.context = context;
-        this.mealsFavoriteList = mealsFavoriteList;
+        this.mealsIteList = mealsFavoriteList;
         this.listener = listener;
     }
-    public void setMealsFavoriteList(List<MealsItem> updatedMealList) {
-        this.mealsFavoriteList = updatedMealList;
-        Log.i(TAG, "setMealsFavoriteList: "+mealsFavoriteList.size()+" "+updatedMealList.size());
+    public void setMealsIteList(List<MealsItem> updatedMealList) {
+        this.mealsIteList = updatedMealList;
+        Log.i(TAG, "setMealsIteList: "+ mealsIteList.size()+" "+updatedMealList.size());
         notifyDataSetChanged();
     }
 
@@ -48,22 +48,22 @@ public class AdapterFavorite extends RecyclerView.Adapter<AdapterFavorite.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull AdapterFavorite.ViewHolder holder, int position) {
-        holder.txtMealName.setText(mealsFavoriteList.get(position).getStrMeal());
-        Glide.with(context).load(mealsFavoriteList.get(position).getStrMealThumb())
+        holder.txtMealName.setText(mealsIteList.get(position).getStrMeal());
+        Glide.with(context).load(mealsIteList.get(position).getStrMealThumb())
                 .apply(new RequestOptions()
                         .fitCenter()
                         .placeholder(R.drawable.ic_app)
                         .error(R.drawable.ic_app)).into(holder.imgMeal);
         Log.i(TAG, "onBindViewHolder: ");
         holder.imgDelete.setOnClickListener(view -> {
-            listener.onFavoriteClicked(mealsFavoriteList.get(position));
+            listener.onDeleteClicked(mealsIteList.get(position).getIdMeal());
         });
     }
 
     @Override
     public int getItemCount() {
-        Log.i(TAG, "getItemCount: "+mealsFavoriteList.size());
-        return mealsFavoriteList.size();
+        Log.i(TAG, "getItemCount: "+ mealsIteList.size());
+        return mealsIteList.size();
 
     }
 
