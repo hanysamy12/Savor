@@ -40,20 +40,25 @@
 
         <ImageView
             android:id="@+id/imgAddToFav"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:backgroundTint="@color/white"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10sp"
+            android:padding="3dp"
+            android:background="@drawable/circle_shape"
             android:src="@drawable/ic_heart"
             app:layout_constraintEnd_toEndOf="@id/guideline8"
-            app:layout_constraintBottom_toBottomOf="@id/imageMealDetails"/>
+            app:layout_constraintTop_toTopOf="@id/imageMealDetails"/>
         <ImageView
             android:id="@+id/imgToPlan"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_marginTop="10sp"
+            android:layout_height="30dp"
+            android:padding="3dp"
+            android:background="@drawable/circle_shape"
             android:backgroundTint="@color/white"
-            android:src="@drawable/ic_calender"
+            android:src="@drawable/ic_calendar_add"
             app:layout_constraintStart_toEndOf="@id/guideline7"
-            app:layout_constraintBottom_toBottomOf="@id/imageMealDetails"/>
+            app:layout_constraintTop_toTopOf="@id/imageMealDetails"/>
 
 
         <TextView
@@ -142,12 +147,13 @@
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="txtInstructions" />
 
-        <VideoView
+        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
             android:id="@+id/videoViewMealDetails"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             app:layout_constraintBaseline_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline8"
             app:layout_constraintStart_toEndOf="@id/guideline7"
             app:layout_constraintTop_toBottomOf="@id/labelVideo" />

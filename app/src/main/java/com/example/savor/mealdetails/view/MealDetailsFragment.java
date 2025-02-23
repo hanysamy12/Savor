@@ -30,6 +30,9 @@ import com.example.savor.mealdetails.presenter.MealDetailsPresenterImp;
 import com.example.savor.remote.model.MealsRemoteDataSource;
 import com.example.savor.remote.model.MealsRepositoryImp;
 import com.example.savor.remote.model.pojo.MealsItem;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.Calendar;
 import java.util.List;
@@ -44,17 +47,18 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
     TextView txtCountry;
     TextView txtCategory;
     TextView txtInstructions;
-    VideoView videoView;
+    YouTubePlayerView videoView;
     RecyclerView recyclerViewIngredient;
     String mealId; //from Saved Argus
     MealsItem mealItem; //from showMealDetails
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
         mealId = MealDetailsFragmentArgs.fromBundle(getArguments()).getMealId();
-       // Log.i(TAG, "onCreateView: MealId" + mealId);
+        // Log.i(TAG, "onCreateView: MealId" + mealId);
         return inflater.inflate(R.layout.fragment_meal_details, container, false);
     }
 
@@ -78,6 +82,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
         imgAddToPlan.setOnClickListener(view1 -> {
             showDatePicker();
         });
+
     }
 
     @Override
@@ -94,7 +99,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
                         .error(R.drawable.ic_app)).into(imgMeal);
         AdapterIngredientMealDetails adapterIngredientMealDetails = new AdapterIngredientMealDetails(requireContext(), ingredientList, measureList, this);
         recyclerViewIngredient.setAdapter(adapterIngredientMealDetails);
-
+        playVideo(mealsItem.getStrYoutube());
         imgAddToFav.setOnClickListener(view1 -> {
             mealDetailsPresenterImp.addToFavorite(mealsItem);
             Toast.makeText(requireContext(), "Added", Toast.LENGTH_LONG).show();
@@ -105,6 +110,22 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
     @Override
     public void showError(String errorMsg) {
         Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void playVideo(String videoUrl) {
+        if (videoUrl != null) {
+            //String videoUrl ="https://www.youtube.com/watch?v=UVAMAoA2_WU";
+            String videoId = videoUrl.split("v=")[1];
+            Log.i(TAG, "videoID: " + videoId);
+            videoView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                @Override
+                public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                    super.onReady(youTubePlayer);
+                    youTubePlayer.cueVideo(videoId, 0); //loaVideo is auto Play
+
+                }
+            });
+        }
     }
 
     private void showDatePicker() {
@@ -123,7 +144,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
                     Toast.makeText(requireContext(), selectedDate, Toast.LENGTH_SHORT).show();
                 }, year, month, day);//set today as default
         datePickerDialog.show();
-        DatePicker datePicker=datePickerDialog.getDatePicker();
+        DatePicker datePicker = datePickerDialog.getDatePicker();
         datePicker.setMinDate(calendar.getTimeInMillis());
     }
 

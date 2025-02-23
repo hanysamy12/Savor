@@ -49,7 +49,6 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.4.0")
     // For control over item selection of both touch and mouse driven selection
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
-
     //Glide
     implementation(libs.glide)
     //Retrofit
@@ -64,5 +63,10 @@ dependencies {
     //Room
     implementation (libs.room.runtime)
     annotationProcessor (libs.room.compiler)
-
+    //youtube
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
+    // RxJava 3
+    implementation ("io.reactivex.rxjava3:rxjava:3.1.6")
+    // RxAndroid  (UI thread)
+    implementation ("io.reactivex.rxjava3:rxandroid:3.0.0")
 }

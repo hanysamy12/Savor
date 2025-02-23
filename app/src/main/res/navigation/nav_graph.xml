@@ -47,12 +47,20 @@
         android:id="@+id/favoriteFragment"
         android:name="com.example.savor.favorite.view.FavoriteFragment"
         android:label="Favorites"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/planFragment"
         android:name="com.example.savor.plan.view.PlanFragment"
         android:label="Planner"
-        tools:layout="@layout/fragment_plan" />
+        tools:layout="@layout/fragment_plan" >
+        <action
+            android:id="@+id/action_planFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.savor.search.view.SearchFragment"

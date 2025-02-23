@@ -1,6 +1,7 @@
 package com.example.savor.search.view;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.savor.R;
 import com.example.savor.database.MealsLocalDataSource;
 import com.example.savor.remote.model.MealsRemoteDataSource;
@@ -43,11 +46,16 @@ SearchFragmentContract searchFragmentContract;
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.txtAreaName.setText(areas.get(position).getStrArea());
-       /* Glide.with(context).load(areas.get(position))
+        String flagCode = getCountryCode(areas.get(position).getStrArea().toLowerCase());
+
+        String flagUrl = "https://www.themealdb.com/images/icons/flags/big/64/"+flagCode+".png";
+        Log.i("TAG", "onBindViewHolder: "+flagCode);
+
+        Glide.with(context).load(flagUrl)
                 .apply(new RequestOptions()
-                        .fitCenter()
+                        .circleCrop()
                         .placeholder(R.drawable.ic_app)
-                        .error(R.drawable.ic_app)).into(holder.imgArea);*/
+                        .error(R.drawable.ic_app)).into(holder.imgArea);
         holder.imgArea.setOnClickListener(view -> {
             searchPresenterImp = new SearchPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(context)),searchFragmentContract);
             searchPresenterImp.getFilteredMealsByCountry(areas.get(position).getStrArea());
@@ -70,4 +78,45 @@ SearchFragmentContract searchFragmentContract;
 
          }
      }
+
+    private String getCountryCode(String countryName) {
+        if (countryName == null) return "null";
+
+        countryName = countryName.toLowerCase();
+
+        switch (countryName) {
+            case "american": return "us";
+            case "british": return "gb";
+            case "canadian": return "ca";
+            case "chinese": return "cn";
+            case "croatian": return "hr";
+            case "dutch": return "nl";
+            case "egyptian": return "eg";
+            case "french": return "fr";
+            case "greek": return "gr";
+            case "indian": return "in";
+            case "irish": return "ie";
+            case "italian": return "it";
+            case "jamaican": return "jm";
+            case "japanese": return "jp";
+            case "kenyan": return "ke";
+            case "malaysian": return "my";
+            case "mexican": return "mx";
+            case "moroccan": return "ma";
+            case "polish": return "pl";
+            case "portuguese": return "pt";
+            case "russian": return "ru";
+            case "spanish": return "es";
+            case "thai": return "th";
+            case "filipino": return "th";
+            case "norwegian": return "pt";
+            case "ukrainian": return "ke";
+            case "uruguayan": return "jm";
+            case "tunisian": return "tn";
+            case "turkish": return "tr";
+            case "vietnamese": return "vn";
+            default: return "null";
+        }
+    }
+
 }

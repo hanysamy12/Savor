@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -63,6 +64,12 @@ RecyclerView recyclerView;
     public void onDeleteClicked(String id) {
         planFragmentPresenter.deleteFromPlan(id);
         Log.i(TAG, "onPlanClicked: ");
+    }
+
+    @Override
+    public void onMealClicked(String id) {
+        PlanFragmentDirections.ActionPlanFragmentToMealDetailsFragment action = PlanFragmentDirections.actionPlanFragmentToMealDetailsFragment(id);
+        Navigation.findNavController(requireView()).navigate(action);
     }
 
     @Override

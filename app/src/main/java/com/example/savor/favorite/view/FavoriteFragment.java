@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -73,5 +74,11 @@ public class FavoriteFragment extends Fragment implements FavoriteFragmentContra
     @Override
     public void onDeleteClicked(String id) {
         favoritePresenterImp.deleteMeal(id);
+    }
+
+    @Override
+    public void onMealClicked(String id) {
+        FavoriteFragmentDirections.ActionFavoriteFragmentToMealDetailsFragment action = FavoriteFragmentDirections.actionFavoriteFragmentToMealDetailsFragment(id);
+        Navigation.findNavController(recyclerView).navigate(action);
     }
 }

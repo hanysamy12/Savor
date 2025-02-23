@@ -32,7 +32,6 @@ public class AdapterFavorite extends RecyclerView.Adapter<AdapterFavorite.ViewHo
     }
     public void setMealsIteList(List<MealsItem> updatedMealList) {
         this.mealsIteList = updatedMealList;
-        Log.i(TAG, "setMealsIteList: "+ mealsIteList.size()+" "+updatedMealList.size());
         notifyDataSetChanged();
     }
 
@@ -54,21 +53,24 @@ public class AdapterFavorite extends RecyclerView.Adapter<AdapterFavorite.ViewHo
                         .fitCenter()
                         .placeholder(R.drawable.ic_app)
                         .error(R.drawable.ic_app)).into(holder.imgMeal);
-        Log.i(TAG, "onBindViewHolder: ");
         holder.imgDelete.setOnClickListener(view -> {
             listener.onDeleteClicked(mealsIteList.get(position).getIdMeal());
+        });
+        holder.txtDate.setText(mealsIteList.get(position).getDate());
+        holder.constraintLayout.setOnClickListener(view -> {
+            listener.onMealClicked(mealsIteList.get(position).getIdMeal());
         });
     }
 
     @Override
     public int getItemCount() {
-        Log.i(TAG, "getItemCount: "+ mealsIteList.size());
         return mealsIteList.size();
 
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtMealName;
+        TextView txtDate;
         ImageView imgMeal;
         ImageView imgDelete;
         ConstraintLayout constraintLayout;
@@ -76,11 +78,10 @@ public class AdapterFavorite extends RecyclerView.Adapter<AdapterFavorite.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtMealName = itemView.findViewById(R.id.txtMealNameFavorite);
+            txtDate = itemView.findViewById(R.id.txtMealDate);
             imgMeal = itemView.findViewById(R.id.imgMealFavorite);
             imgDelete = itemView.findViewById(R.id.imgDeleteFavorite);
             constraintLayout = itemView.findViewById(R.id.listItemFavorite);
-            Log.i(TAG, "ViewHolder: ");
-
         }
     }
 }
