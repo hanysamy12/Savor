@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.savor.R;
 import com.example.savor.remote.authentication.model.Authentication;
@@ -28,12 +29,12 @@ import com.google.android.material.snackbar.Snackbar;
 public class SignUpFragment extends Fragment implements SignUpFragmentContract {
     SignUpPresenterImp signUpPresenterImp;
 
-    /*private Authentication authentication;*/
     EditText txtUseName;
     EditText txtPassword;
     Button btnSignUp;
     TextView haveAccount;
     TextView skipSignUp;
+    TextView txtConfirmPassword;
     View view;
     ProgressBar progressBar;
 
@@ -44,7 +45,7 @@ public class SignUpFragment extends Fragment implements SignUpFragmentContract {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-         signUpPresenterImp = new SignUpPresenterImp(new AuthenticationRepoImp(new Authentication(requireActivity())),this);
+         signUpPresenterImp = new SignUpPresenterImp(new AuthenticationRepoImp(new Authentication(requireActivity())),this,requireContext());
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sign_up, container, false);
     }
@@ -52,47 +53,53 @@ public class SignUpFragment extends Fragment implements SignUpFragmentContract {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.view = view;
+        //this.view = view;
         txtUseName=view.findViewById(R.id.txtUserNameSignUp);
         txtPassword=view.findViewById(R.id.txtPasswordSignUp);
+        txtConfirmPassword = view.findViewById(R.id.txtConfirmPasswordSignUp);
         skipSignUp = view.findViewById(R.id.txtSkipSigUp);
         haveAccount = view.findViewById(R.id.btnHaveAccount);
         btnSignUp=view.findViewById(R.id.btnSignUp);
+        progressBar = view.findViewById(R.id.signUpProgressBar);
         skipSignUp.setOnClickListener(view1 -> {
-            Navigation.findNavController(view).navigate(R.id.homeFragment);
+            Navigation.findNavController(requireView()).navigate(R.id.homeFragment);
         });
         haveAccount.setOnClickListener(view1 -> {
-            Navigation.findNavController(view).navigate(R.id.loginFragment);
-
+            Navigation.findNavController(requireView()).navigate(R.id.loginFragment);
         });
         btnSignUp.setOnClickListener(view1 -> {
             String userName = txtUseName.getText().toString();
             String password = txtPassword.getText().toString();
-            if(!userName.isEmpty() && !password.isEmpty())
+            String confirmPassword = txtConfirmPassword.getText().toString();
+            if(!userName.isEmpty() && !password.isEmpty() )
             {
-                btnSignUp.setVisibility(INVISIBLE);
-               // signUpProgressBar.setVisibility(VISIBLE);
-                //signUoPresenter.requestLogin(userName,password);
-                signUpPresenterImp.signUp(userName,password);
+                if(!password.equals(confirmPassword))
+                {
+                    txtConfirmPassword.setText("");
+                    Toast.makeText(requireContext(), "Unmatched Password", Toast.LENGTH_SHORT).show();
+                }else {
+                    btnSignUp.setVisibility(INVISIBLE);
+                    progressBar.setVisibility(VISIBLE);
+                    signUpPresenterImp.signUp(userName, password);
+                }
             }else {
-                Snackbar.make(view,"Fill Email And Password",Snackbar.ANIMATION_MODE_FADE).show();
+                Toast.makeText(requireContext(), "Please Fill All Fields", Toast.LENGTH_LONG).show();
             }
-       /*     authentication =new Authentication(requireActivity());
-            authentication.signUp(useName,passWord,this);*/
+
         });
     }
 
     @Override
     public void signUpSuccess(String userName) {
         btnSignUp.setVisibility(VISIBLE);
-        Snackbar.make(view,userName,Snackbar.ANIMATION_MODE_FADE).show();
-
-
+        progressBar.setVisibility(INVISIBLE);
+        Toast.makeText(requireContext(), userName, Toast.LENGTH_SHORT).show();
+        Navigation.findNavController(requireView()).navigate(R.id.homeFragment);
     }
     @Override
     public void signUpFailure(String errorMsg) {
         btnSignUp.setVisibility(VISIBLE);
-        Snackbar.make(view,errorMsg,Snackbar.ANIMATION_MODE_FADE).show();
-
+        progressBar.setVisibility(INVISIBLE);
+        Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
     }
 }

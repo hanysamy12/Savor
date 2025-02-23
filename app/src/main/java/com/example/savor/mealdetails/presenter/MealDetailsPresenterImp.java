@@ -1,15 +1,19 @@
 package com.example.savor.mealdetails.presenter;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.savor.MainActivity;
 import com.example.savor.remote.model.MealsCallBack;
 import com.example.savor.remote.model.MealsRepositoryImp;
 import com.example.savor.remote.model.pojo.MealsItem;
 import com.example.savor.remote.model.pojo.MealsItemResponse;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MealDetailsPresenterImp implements MealDetailsPresenter {
@@ -17,15 +21,18 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
     MealDetailsFragmentContract mealDetailsFragmentContract;
     List<String> ingredienList;
     List<String> measureList;
+    Context context;
     private static final String TAG = "MealDetailsPresenterImp";
 
     public MealDetailsPresenterImp(MealsRepositoryImp mealsRepositoryImp, MealDetailsFragmentContract mealDetailsFragmentContract) {
         this.mealsRepositoryImp = mealsRepositoryImp;
         this.mealDetailsFragmentContract = mealDetailsFragmentContract;
+
     }
 
     @Override
     public void getMealById(Integer mealId) {
+
         mealsRepositoryImp.getMealById(mealId, new MealsCallBack<MealsItemResponse>() {
             @Override
             public void onSuccess(MealsItemResponse response) {
@@ -66,6 +73,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
             mealsRepositoryImp.addPlanMeal(mealsItem);
         }).start();
     }
+
 
     private String getValidIngredient(MealsItem mealsItem, int i) {
         switch (i) {

@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment implements HomeScreenContract , OnCli
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerViewHome.setLayoutManager(layoutManager);
         homeScreenPresenterImp = new HomeScreenPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(requireContext()))
-                ,this);
+                ,this,requireContext());
         homeScreenPresenterImp.getRandomMeal();
         homeScreenPresenterImp.getHomeMeals();
 

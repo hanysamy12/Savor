@@ -17,14 +17,15 @@
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="20dp"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="5dp"
         android:background="@drawable/bg_rounded_rounded"
         android:hint="@string/hintEmail"
         android:inputType="textEmailAddress"
         android:padding="10sp"
         android:singleLine="true"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -33,14 +34,35 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/ic_lock"
         android:background="@drawable/bg_rounded_rounded"
         android:hint="@string/hintPassword"
         android:inputType="textVisiblePassword"
         android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:singleLine="true"
         app:layout_constraintEnd_toEndOf="@+id/txtUserNameSignUp"
         app:layout_constraintStart_toStartOf="@+id/txtUserNameSignUp"
         app:layout_constraintTop_toBottomOf="@+id/txtUserNameSignUp" />
+    <!--android:inputType="textVisiblePassword" -->
+
+    <EditText
+        android:id="@+id/txtConfirmPasswordSignUp"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/ic_lock"
+        android:background="@drawable/bg_rounded_rounded"
+        android:hint="@string/confirm_password"
+        android:inputType="textVisiblePassword"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:singleLine="true"
+        app:layout_constraintEnd_toEndOf="@+id/txtUserNameSignUp"
+        app:layout_constraintStart_toStartOf="@+id/txtUserNameSignUp"
+        app:layout_constraintTop_toBottomOf="@+id/txtPasswordSignUp" />
     <!--android:inputType="textVisiblePassword" -->
 
     <Button
@@ -48,17 +70,26 @@
         android:layout_width="0dp"
         android:layout_height="55dp"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/bg_rounded_rounded"
         android:backgroundTint="@color/primary_color"
         android:text="@string/btnSignUp"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/btnHaveAccount"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <ProgressBar
+        android:id="@+id/signUpProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSignUp"
+        app:layout_constraintEnd_toEndOf="@+id/btnSignUp"
+        app:layout_constraintStart_toStartOf="@+id/btnSignUp"
+        app:layout_constraintTop_toTopOf="@+id/btnSignUp"
+        android:visibility="invisible"/>
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
@@ -73,7 +104,7 @@
         android:layout_marginEnd="20dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_begin="391dp" />
+        app:layout_constraintGuide_end="20dp" />
 
     <TextView
         android:id="@+id/txtSkipSigUp"

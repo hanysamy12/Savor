@@ -17,45 +17,22 @@ public class MainActivity extends AppCompatActivity {
     NavHostFragment navHostFragment;
     BottomNavigationView bottomNavigationView;
     NavController navController;
-    private MealsRemoteDataSource mealsRemoteDataSource;
-    private MealsRepositoryImp mealsRepositoryImp;
-    private static final String TAG = "MainActivity";
-
+    public static final String USER_NAME = "userName";
+    public static final String PREF_DATE = "dateOfTheCurrentDay";
+    public static final String PRES_NAME = "PREF";
+    public static final String TODAY_MEAL_ID ="mealId";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // EdgeToEdge.enable(this);
+        // EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         MealsRemoteDataSource.getInstance();
         navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragmentContainerView);
         navController = navHostFragment.getNavController();
         bottomNavigationView = findViewById(R.id.bottomMenue);
-        NavigationUI.setupWithNavController(bottomNavigationView,navController);
-
-
-/*        mealsRemoteDataSource.getRandomMeal();
-        mealsRemoteDataSource.getAllDetailedMeals("a");
-        mealsRemoteDataSource.getMealById(52924);
-        mealsRemoteDataSource.getAllCategories();
-        mealsRemoteDataSource.getAllAreas();
-        mealsRemoteDataSource.getAllIngredient();*/
-
-       // mealsRepositoryImp = new MealsRepositoryImp(MealsRemoteDataSource.getInstance());
-       /* mealsRepositoryImp.getRandomMeal(new MealsCallBack<MealsItemResponse>() {
-            @Override
-            public void onSuccess(MealsItemResponse response) {
-                Log.i(TAG, "onSuccess: "+response.getMeals().get(0).getStrMeal());
-                Toast.makeText(MainActivity.this, "Congrat", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(String errorMsg) {
-                Log.i(TAG, "onFailure: main -"+errorMsg);
-            }
-        });
-*/    }
-
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+    }
 
 
 }

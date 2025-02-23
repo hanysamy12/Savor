@@ -1,6 +1,7 @@
 package com.example.savor.mealdetails.view;
 
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -51,12 +52,10 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
     RecyclerView recyclerViewIngredient;
     String mealId; //from Saved Argus
     MealsItem mealItem; //from showMealDetails
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         mealId = MealDetailsFragmentArgs.fromBundle(getArguments()).getMealId();
         // Log.i(TAG, "onCreateView: MealId" + mealId);
         return inflater.inflate(R.layout.fragment_meal_details, container, false);
@@ -114,7 +113,6 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
 
     private void playVideo(String videoUrl) {
         if (videoUrl != null) {
-            //String videoUrl ="https://www.youtube.com/watch?v=UVAMAoA2_WU";
             String videoId = videoUrl.split("v=")[1];
             Log.i(TAG, "videoID: " + videoId);
             videoView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {

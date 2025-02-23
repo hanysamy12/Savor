@@ -3,20 +3,25 @@ package com.example.savor.remote.authentication.login.view;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.savor.R;
 import com.example.savor.remote.authentication.model.Authentication;
@@ -29,13 +34,13 @@ public class LoginFragment extends Fragment implements LoginFragmentContract {
     private LoginPresenterImp loginPresenter;
     Button btnLogin;
     EditText txtUseName;
-    EditText txtPassWord;
+    EditText txtPassword;
     TextView clickableTxtCreateAccount;
     TextView skipLogin;
     View view;
     ProgressBar loginProgressBar;
 
-
+    private boolean isPasswordVisible = false;
 
     private static final String TAG = "LoginFragment";
 
@@ -43,37 +48,47 @@ public class LoginFragment extends Fragment implements LoginFragmentContract {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        loginPresenter = new LoginPresenterImp(new AuthenticationRepoImp(new Authentication(requireActivity())),this) ;
+        loginPresenter = new LoginPresenterImp(new AuthenticationRepoImp(new Authentication(requireActivity())), this,requireContext());
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
         clickableTxtCreateAccount = view.findViewById(R.id.clickableTxtSignIn);
         txtUseName = view.findViewById(R.id.txtEmailLogin);
-        txtPassWord =view.findViewById(R.id.txtSearch);
+        txtPassword = view.findViewById(R.id.txtPasswordLogin);
         skipLogin = view.findViewById(R.id.txtSkipLogin);
         btnLogin = view.findViewById(R.id.btnLogin);
         loginProgressBar = view.findViewById(R.id.loginProgressBar);
         clickableTxtCreateAccount.setOnClickListener(view1 -> {
-            Navigation.findNavController(view).navigate(R.id.signUpFragment);
+            Navigation.findNavController(requireView()).navigate(R.id.signUpFragment);
         });
         skipLogin.setOnClickListener(view1 -> {
-            Navigation.findNavController(view).navigate(R.id.homeFragment);
+            Navigation.findNavController(requireView()).navigate(R.id.homeFragment);
+        });
+
+        txtPassword.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getRawX() >= (txtPassword.getRight() - txtPassword.getCompoundDrawables()[2].getBounds().width())) {
+                    togglePasswordVisibility();
+                    return true;
+                }
+            }
+            return false;
         });
         btnLogin.setOnClickListener(view1 -> {
 
             String userName = txtUseName.getText().toString().trim();
-            String password = txtPassWord.getText().toString().trim();
-            if(!userName.isEmpty() && !password.isEmpty())
-            {
+            String password = txtPassword.getText().toString().trim();
+            if (!userName.isEmpty() && !password.isEmpty()) {
                 btnLogin.setVisibility(INVISIBLE);
                 loginProgressBar.setVisibility(VISIBLE);
-                loginPresenter.requestLogin(userName,password);
-            }else {
-                Snackbar.make(view,"Fill Email And Password",Snackbar.ANIMATION_MODE_FADE).show();
+                loginPresenter.requestLogin(userName, password);
+            } else {
+                Toast.makeText(requireContext(), "Fill Email And Password", Toast.LENGTH_LONG).show();
             }
 
         });
@@ -83,15 +98,38 @@ public class LoginFragment extends Fragment implements LoginFragmentContract {
     public void onLoginSuccess(String userName) {
         btnLogin.setVisibility(VISIBLE);
         loginProgressBar.setVisibility(INVISIBLE);
-        Snackbar.make(view,userName,Snackbar.ANIMATION_MODE_FADE).show();
-        Navigation.findNavController(view).navigate(R.id.homeFragment);
+        Snackbar.make(view, userName, Snackbar.ANIMATION_MODE_FADE).show();
+        Navigation.findNavController(requireView()).navigate(R.id.homeFragment);
     }
 
     @Override
     public void onLoginFailure(String errorMsg) {
         btnLogin.setVisibility(VISIBLE);
         loginProgressBar.setVisibility(INVISIBLE);
-        Snackbar.make(view,errorMsg,Snackbar.ANIMATION_MODE_FADE).show();
+        Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void togglePasswordVisibility() {
+        if (isPasswordVisible) {
+            txtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            txtPassword.setCompoundDrawablesWithIntrinsicBounds(
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_lock),
+                    null,
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_eye),
+                    null
+            );
+        } else {
+            // Show password
+            txtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            txtPassword.setCompoundDrawablesWithIntrinsicBounds(
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_lock),
+                    null,
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_eye_off),
+                    null
+            );
+        }
+        txtPassword.setSelection(txtPassword.getText().length());
+        isPasswordVisible = !isPasswordVisible;
     }
 
 }
