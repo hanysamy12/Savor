@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.text.InputType;
@@ -67,7 +69,11 @@ public class LoginFragment extends Fragment implements LoginFragmentContract {
             Navigation.findNavController(requireView()).navigate(R.id.signUpFragment);
         });
         skipLogin.setOnClickListener(view1 -> {
-            Navigation.findNavController(requireView()).navigate(R.id.homeFragment);
+            NavController navController = Navigation.findNavController(requireView());
+            NavOptions navOptions = new NavOptions.Builder()
+                    .setPopUpTo(R.id.loginFragment,true)
+                    .build();
+            navController.navigate(R.id.homeFragment,null,navOptions);
         });
 
         txtPassword.setOnTouchListener((v, event) -> {
@@ -98,9 +104,12 @@ public class LoginFragment extends Fragment implements LoginFragmentContract {
     public void onLoginSuccess(String userName) {
         btnLogin.setVisibility(VISIBLE);
         loginProgressBar.setVisibility(INVISIBLE);
-        Snackbar.make(view, userName, Snackbar.ANIMATION_MODE_FADE).show();
-        Navigation.findNavController(requireView()).navigate(R.id.homeFragment);
-    }
+        Toast.makeText(requireContext(), userName, Toast.LENGTH_SHORT).show();
+        NavController navController = Navigation.findNavController(requireView());
+        NavOptions navOptions = new NavOptions.Builder()
+                .setPopUpTo(R.id.loginFragment,true)
+                .build();
+        navController.navigate(R.id.homeFragment,null,navOptions);    }
 
     @Override
     public void onLoginFailure(String errorMsg) {

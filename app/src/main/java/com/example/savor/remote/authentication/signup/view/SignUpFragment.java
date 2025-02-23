@@ -8,6 +8,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -94,7 +96,11 @@ public class SignUpFragment extends Fragment implements SignUpFragmentContract {
         btnSignUp.setVisibility(VISIBLE);
         progressBar.setVisibility(INVISIBLE);
         Toast.makeText(requireContext(), userName, Toast.LENGTH_SHORT).show();
-        Navigation.findNavController(requireView()).navigate(R.id.homeFragment);
+        NavController navController = Navigation.findNavController(requireView());
+        NavOptions navOptions = new NavOptions.Builder()
+                .setPopUpTo(R.id.signUpFragment,true)
+                .build();
+        navController.navigate(R.id.homeFragment,null,navOptions);
     }
     @Override
     public void signUpFailure(String errorMsg) {

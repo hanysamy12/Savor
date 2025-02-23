@@ -112,7 +112,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
     }
 
     private void playVideo(String videoUrl) {
-        if (videoUrl != null) {
+        if (videoUrl != null && !videoUrl.isEmpty()) {
             String videoId = videoUrl.split("v=")[1];
             Log.i(TAG, "videoID: " + videoId);
             videoView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {

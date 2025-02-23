@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String PREF_DATE = "dateOfTheCurrentDay";
     public static final String PRES_NAME = "PREF";
     public static final String TODAY_MEAL_ID ="mealId";
+    public static final Boolean SPLASHED = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,5 +35,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
