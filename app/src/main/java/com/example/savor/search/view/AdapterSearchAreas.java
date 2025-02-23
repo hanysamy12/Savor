@@ -19,6 +19,7 @@ import com.example.savor.database.MealsLocalDataSource;
 import com.example.savor.remote.model.MealsRemoteDataSource;
 import com.example.savor.remote.model.MealsRepositoryImp;
 import com.example.savor.remote.model.pojo.AreasItem;
+import com.example.savor.search.presenter.OnClickListenerArea;
 import com.example.savor.search.presenter.SearchFragmentContract;
 import com.example.savor.search.presenter.SearchPresenterImp;
 
@@ -29,10 +30,12 @@ Context context;
 List<AreasItem> areas;
 SearchPresenterImp searchPresenterImp;
 SearchFragmentContract searchFragmentContract;
-    public AdapterSearchAreas(Context context, List<AreasItem> areas , SearchFragmentContract searchFragmentContract) {
+OnClickListenerArea listener;
+    public AdapterSearchAreas(Context context, List<AreasItem> areas , SearchFragmentContract searchFragmentContract,OnClickListenerArea listener) {
         this.context = context;
         this.areas = areas;
         this.searchFragmentContract = searchFragmentContract;
+        this.listener = listener;
     }
 
     @NonNull
@@ -57,9 +60,10 @@ SearchFragmentContract searchFragmentContract;
                         .placeholder(R.drawable.ic_app)
                         .error(R.drawable.ic_app)).into(holder.imgArea);
         holder.imgArea.setOnClickListener(view -> {
-            searchPresenterImp = new SearchPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(context)),searchFragmentContract);
+            listener.onClickAreaListener(areas.get(position).getStrArea());
+ /*           searchPresenterImp = new SearchPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(context)),searchFragmentContract);
             searchPresenterImp.getFilteredMealsByCountry(areas.get(position).getStrArea());
-        });
+      */  });
     }
 
     @Override

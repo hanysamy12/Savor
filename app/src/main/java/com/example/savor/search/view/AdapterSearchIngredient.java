@@ -18,6 +18,7 @@ import com.example.savor.database.MealsLocalDataSource;
 import com.example.savor.remote.model.MealsRemoteDataSource;
 import com.example.savor.remote.model.MealsRepositoryImp;
 import com.example.savor.remote.model.pojo.IngredientItem;
+import com.example.savor.search.presenter.OnClickListenerIngredient;
 import com.example.savor.search.presenter.SearchFragmentContract;
 import com.example.savor.search.presenter.SearchPresenterImp;
 
@@ -26,11 +27,12 @@ import java.util.List;
 public class AdapterSearchIngredient extends RecyclerView.Adapter<AdapterSearchIngredient.ViewHolder>{
 Context context;
 List<IngredientItem> ingredient;
-SearchPresenterImp searchPresenterImp;
 SearchFragmentContract searchFragmentContract;
-    public AdapterSearchIngredient(Context context, List<IngredientItem> ingredient,SearchFragmentContract searchFragmentContract) {
+OnClickListenerIngredient listener;
+    public AdapterSearchIngredient(Context context, List<IngredientItem> ingredient,SearchFragmentContract searchFragmentContract,OnClickListenerIngredient listener) {
         this.context = context;
         this.ingredient = ingredient;
+        this.listener = listener;
         this.searchFragmentContract = searchFragmentContract;
     }
 
@@ -50,9 +52,8 @@ SearchFragmentContract searchFragmentContract;
                         .placeholder(R.drawable.ic_app)
                         .error(R.drawable.ic_app)).into(holder.imgIngredient);
         holder.imgIngredient.setOnClickListener(view -> {
-            searchPresenterImp = new SearchPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(context)), searchFragmentContract);
-            searchPresenterImp.getFilteredMealsByIngredient(ingredient.get(position).getStrIngredient());
-        });
+            listener.onClickIngListener(ingredient.get(position).getStrIngredient());
+             });
     }
 
     @Override
