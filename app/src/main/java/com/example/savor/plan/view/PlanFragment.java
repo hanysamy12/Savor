@@ -5,8 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.savor.R;
 import com.example.savor.database.MealsLocalDataSource;
@@ -23,9 +22,9 @@ import com.example.savor.favorite.view.AdapterFavorite;
 import com.example.savor.plan.presenter.PlanFragmentContract;
 import com.example.savor.plan.presenter.PlanFragmentPresenter;
 import com.example.savor.plan.presenter.PlanFragmentPresenterImp;
-import com.example.savor.remote.model.MealsRemoteDataSource;
-import com.example.savor.remote.model.MealsRepositoryImp;
-import com.example.savor.remote.model.pojo.MealsItem;
+import com.example.savor.model.MealsRemoteDataSource;
+import com.example.savor.model.MealsRepositoryImp;
+import com.example.savor.model.pojo.MealsItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,14 +49,11 @@ RecyclerView recyclerView;
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         planFragmentPresenter = new PlanFragmentPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance()
                 , MealsLocalDataSource.getInstance(requireContext())),this);
-        LiveData<List<MealsItem>> liveMealItemList = planFragmentPresenter.showPlan();
+        planFragmentPresenter.showPlan();
         adapterFavorite = new AdapterFavorite(requireContext(), new ArrayList<>(),this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapterFavorite);
-        liveMealItemList.observe((LifecycleOwner) requireContext(), mealsItemList -> {
-            adapterFavorite.setMealsIteList(mealsItemList);
-            //Log.i(TAG, "FavoriteFragment: "+mealsItemList.size());
-        });
+
     }
 
     @Override
@@ -73,12 +69,17 @@ RecyclerView recyclerView;
     }
 
     @Override
-    public void showSuccessMsg(String successMsg) {
+    public void showPlanMeals(List<MealsItem> mealsItemList) {
+        adapterFavorite.setMealsIteList(mealsItemList);
+    }
 
+    @Override
+    public void showSuccessMsg(String successMsg) {
+        Toast.makeText(requireContext(), successMsg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showError(String errorMsg) {
-
+        Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.savor.remote.model.pojo;
+package com.example.savor.model.pojo;
 
 public class MealsIngredientItem{
 	private String strMealThumb;

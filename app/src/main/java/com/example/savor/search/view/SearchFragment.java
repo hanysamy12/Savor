@@ -22,13 +22,12 @@ import android.widget.EditText;
 
 import com.example.savor.R;
 import com.example.savor.database.MealsLocalDataSource;
-import com.example.savor.homepage.view.HomeFragmentDirections;
-import com.example.savor.remote.model.MealsRemoteDataSource;
-import com.example.savor.remote.model.MealsRepositoryImp;
-import com.example.savor.remote.model.pojo.AreaResponse;
-import com.example.savor.remote.model.pojo.CategoriesResponse;
-import com.example.savor.remote.model.pojo.FilteredResponse;
-import com.example.savor.remote.model.pojo.IngredientResponse;
+import com.example.savor.model.MealsRemoteDataSource;
+import com.example.savor.model.MealsRepositoryImp;
+import com.example.savor.model.pojo.AreaResponse;
+import com.example.savor.model.pojo.CategoriesResponse;
+import com.example.savor.model.pojo.FilteredResponse;
+import com.example.savor.model.pojo.IngredientResponse;
 import com.example.savor.search.presenter.OnClickListenerArea;
 import com.example.savor.search.presenter.OnClickListenerCategory;
 import com.example.savor.search.presenter.OnClickListenerIngredient;
@@ -39,11 +38,8 @@ import com.example.savor.search.presenter.SearchPresenterImp;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
-import java.util.concurrent.TimeUnit;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
@@ -52,7 +48,6 @@ public class SearchFragment extends Fragment implements SearchFragmentContract
     ChipGroup chipGroup;
     EditText txtSearch;
     SearchPresenter searchPresenter;
-    //LinearLayoutManager layoutManager;
     GridLayoutManager layoutManager;
     RecyclerView recyclerView;
     AdapterSearchCategories adapterCategories;

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -22,9 +23,9 @@ import com.example.savor.R;
 import com.example.savor.database.MealsLocalDataSource;
 import com.example.savor.homepage.presenter.HomeScreenContract;
 import com.example.savor.homepage.presenter.HomeScreenPresenterImp;
-import com.example.savor.remote.model.MealsRemoteDataSource;
-import com.example.savor.remote.model.MealsRepositoryImp;
-import com.example.savor.remote.model.pojo.MealsItemResponse;
+import com.example.savor.model.MealsRemoteDataSource;
+import com.example.savor.model.MealsRepositoryImp;
+import com.example.savor.model.pojo.MealsItemResponse;
 import com.example.savor.search.presenter.OnClickMealListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -83,19 +84,19 @@ public class HomeFragment extends Fragment implements HomeScreenContract , OnCli
 
     @Override
     public void showErrorMsg(String errorMsg) {
-        Log.i(TAG, "showErrorMsg: "+errorMsg);
+        Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showHomeMeals(MealsItemResponse mealsItemResponse) {
-        Log.i(TAG, "showHomeMeals: "+mealsItemResponse.getMeals().get(2).getStrMeal());
         adapterHomeList  = new AdapterHomeList(requireContext(),mealsItemResponse.getMeals(),this);
         recyclerViewHome.setAdapter(adapterHomeList);
     }
 
     @Override
     public void onClickListener(String mealId) {
-        HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealId);
+        HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action =
+                HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealId);
         Navigation.findNavController(requireView()).navigate(action);
     }
 }

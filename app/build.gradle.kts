@@ -55,6 +55,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.gson)
+    implementation ("com.squareup.retrofit2:adapter-rxjava3:2.11.0")
+
     //lotti
     implementation(libs.lottie);
     //Firebase
@@ -63,6 +65,7 @@ dependencies {
     //Room
     implementation (libs.room.runtime)
     annotationProcessor (libs.room.compiler)
+    implementation ("androidx.room:room-rxjava3:2.6.1")
     //youtube
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
     // RxJava 3

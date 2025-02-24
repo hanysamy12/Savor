@@ -1,6 +1,6 @@
 package com.example.savor.homepage.presenter;
 
-import com.example.savor.remote.model.pojo.MealsItemResponse;
+import com.example.savor.model.pojo.MealsItemResponse;
 
 public interface HomeScreenContract {
     void showRandomMeal(MealsItemResponse mealsItemResponse);

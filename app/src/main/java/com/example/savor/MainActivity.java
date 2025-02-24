@@ -7,8 +7,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.savor.remote.model.MealsRemoteDataSource;
-import com.example.savor.remote.model.MealsRepositoryImp;
+import com.example.savor.model.MealsRemoteDataSource;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 //userName honi76034@gmail.com
@@ -21,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String PREF_DATE = "dateOfTheCurrentDay";
     public static final String PRES_NAME = "PREF";
     public static final String TODAY_MEAL_ID ="mealId";
-    public static final Boolean SPLASHED = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -14,13 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.savor.R;
-import com.example.savor.database.MealsLocalDataSource;
-import com.example.savor.remote.model.MealsRemoteDataSource;
-import com.example.savor.remote.model.MealsRepositoryImp;
-import com.example.savor.remote.model.pojo.IngredientItem;
+import com.example.savor.model.pojo.IngredientItem;
 import com.example.savor.search.presenter.OnClickListenerIngredient;
 import com.example.savor.search.presenter.SearchFragmentContract;
-import com.example.savor.search.presenter.SearchPresenterImp;
 
 import java.util.List;
 

@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.savor.remote.model.pojo.MealsItem;
+import com.example.savor.model.pojo.MealsItem;
 
 @Database(entities = {MealsItem.class}, version =1)
 public abstract class MealsLocalDataSource extends RoomDatabase {

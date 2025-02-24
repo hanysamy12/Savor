@@ -1,7 +1,6 @@
 package com.example.savor.favorite.view;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.savor.R;
 import com.example.savor.favorite.presenter.OnClickListener;
-import com.example.savor.remote.model.pojo.MealsItem;
+import com.example.savor.model.pojo.MealsItem;
 
 import java.util.List;
 

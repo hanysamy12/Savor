@@ -1,4 +1,4 @@
-package com.example.savor.remote.model.pojo;
+package com.example.savor.model.pojo;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

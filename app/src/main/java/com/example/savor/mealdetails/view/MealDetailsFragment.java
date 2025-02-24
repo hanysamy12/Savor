@@ -1,7 +1,6 @@
 package com.example.savor.mealdetails.view;
 
 import android.app.DatePickerDialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,8 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Dao;
-import androidx.room.Database;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +17,6 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -28,9 +24,9 @@ import com.example.savor.R;
 import com.example.savor.database.MealsLocalDataSource;
 import com.example.savor.mealdetails.presenter.MealDetailsFragmentContract;
 import com.example.savor.mealdetails.presenter.MealDetailsPresenterImp;
-import com.example.savor.remote.model.MealsRemoteDataSource;
-import com.example.savor.remote.model.MealsRepositoryImp;
-import com.example.savor.remote.model.pojo.MealsItem;
+import com.example.savor.model.MealsRemoteDataSource;
+import com.example.savor.model.MealsRepositoryImp;
+import com.example.savor.model.pojo.MealsItem;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -101,7 +97,6 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
         playVideo(mealsItem.getStrYoutube());
         imgAddToFav.setOnClickListener(view1 -> {
             mealDetailsPresenterImp.addToFavorite(mealsItem);
-            Toast.makeText(requireContext(), "Added", Toast.LENGTH_LONG).show();
         });
 
     }
@@ -109,6 +104,11 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
     @Override
     public void showError(String errorMsg) {
         Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showSuccessMessage(String successMsg) {
+        Toast.makeText(requireContext(), successMsg, Toast.LENGTH_SHORT).show();
     }
 
     private void playVideo(String videoUrl) {
@@ -139,7 +139,6 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
                     Log.i(TAG, "Selected Date: " + selectedDate);
                     mealItem.setDate(selectedDate);
                     mealDetailsPresenterImp.addToPlan(mealItem);
-                    Toast.makeText(requireContext(), selectedDate, Toast.LENGTH_SHORT).show();
                 }, year, month, day);//set today as default
         datePickerDialog.show();
         DatePicker datePicker = datePickerDialog.getDatePicker();

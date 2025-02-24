@@ -1,11 +1,10 @@
 package com.example.savor.favorite.presenter;
 
-import androidx.lifecycle.LiveData;
+import com.example.savor.model.MealsRepositoryImp;
 
-import com.example.savor.remote.model.MealsRepositoryImp;
-import com.example.savor.remote.model.pojo.MealsItem;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
-import java.util.List;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FavoritePresenterImp implements FavoriteFragmentPresenter{
     MealsRepositoryImp mealsRepositoryImp;
@@ -16,16 +15,29 @@ public class FavoritePresenterImp implements FavoriteFragmentPresenter{
         this.favoriteFragmentContract = favoriteFragmentContract;
     }
 
-    @Override
-    public LiveData<List<MealsItem>> showMeals() {
-        return mealsRepositoryImp.getFavoriteMeals();
-    }
 
+    @Override
+    public void showMeals() {
+        mealsRepositoryImp.getFavoriteMeals()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mealsItemList -> {
+                    favoriteFragmentContract.showMeals(mealsItemList);
+                }, throwable -> {
+                    favoriteFragmentContract.showError("No Items To Show");
+                });
+    }
     @Override
     public void deleteMeal(String id) {
-        new Thread(() -> {
-            mealsRepositoryImp.deleteMealFromFavorite(id);
-        }).start();
+        mealsRepositoryImp.deleteMealFromFavorite(id)
+                .andThen(mealsRepositoryImp.deleteUnUsedMeals())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    favoriteFragmentContract.showSuccessMsg("deleted");
+                }, throwable -> {
+                    favoriteFragmentContract.showError("Not Deleted");
+                });
 
     }
-}
+    }

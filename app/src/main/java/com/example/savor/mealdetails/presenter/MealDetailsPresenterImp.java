@@ -1,27 +1,21 @@
 package com.example.savor.mealdetails.presenter;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
-
-import com.example.savor.MainActivity;
-import com.example.savor.remote.model.MealsCallBack;
-import com.example.savor.remote.model.MealsRepositoryImp;
-import com.example.savor.remote.model.pojo.MealsItem;
-import com.example.savor.remote.model.pojo.MealsItemResponse;
+import com.example.savor.model.MealsRepositoryImp;
+import com.example.savor.model.pojo.MealsItem;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MealDetailsPresenterImp implements MealDetailsPresenter {
     MealsRepositoryImp mealsRepositoryImp;
     MealDetailsFragmentContract mealDetailsFragmentContract;
     List<String> ingredienList;
     List<String> measureList;
-    Context context;
     private static final String TAG = "MealDetailsPresenterImp";
 
     public MealDetailsPresenterImp(MealsRepositoryImp mealsRepositoryImp, MealDetailsFragmentContract mealDetailsFragmentContract) {
@@ -33,45 +27,57 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
     @Override
     public void getMealById(Integer mealId) {
 
-        mealsRepositoryImp.getMealById(mealId, new MealsCallBack<MealsItemResponse>() {
-            @Override
-            public void onSuccess(MealsItemResponse response) {
-                MealsItem meal = response.getMeals().get(0);
-                ingredienList = new ArrayList<>();
-                measureList = new ArrayList<>();
-                for (int i = 1; i <= 20; i++) {
-                    String ingredient = getValidIngredient(meal, i);
-                    String measure = getMeasure(meal, i);
+        mealsRepositoryImp.getMealById(mealId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mealsItemResponse -> {
+                    MealsItem meal = mealsItemResponse.getMeals().get(0);
+                    ingredienList = new ArrayList<>();
+                    measureList = new ArrayList<>();
+                    for (int i = 1; i <= 20; i++) {
+                        String ingredient = getValidIngredient(meal, i);
+                        String measure = getMeasure(meal, i);
 
-                    if (ingredient != null && !ingredient.isEmpty()) {
-                        ingredienList.add(ingredient);
-                        measureList.add(measure);
+                        if (ingredient != null && !ingredient.isEmpty()) {
+                            ingredienList.add(ingredient);
+                            measureList.add(measure);
+                        }
                     }
-                }
 
-                mealDetailsFragmentContract.showMealDetails(response.getMeals().get(0), ingredienList, measureList);
-            }
+                    mealDetailsFragmentContract.showMealDetails(mealsItemResponse.getMeals().get(0), ingredienList, measureList);
+                }, throwable -> {
+                    mealDetailsFragmentContract.showError(throwable.getMessage());
+                });
 
-            @Override
-            public void onFailure(String errorMsg) {
-                mealDetailsFragmentContract.showError(errorMsg);
-            }
-        });
     }
 
     @Override
     public void addToFavorite(MealsItem mealsItem) {
+        mealsRepositoryImp.addFavoriteMeal(mealsItem)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {
+                            mealDetailsFragmentContract.showSuccessMessage("Added");
+                        },throwable -> {
+                            mealDetailsFragmentContract.showError("notAdded");
+                            Log.i(TAG, "NotaddedToFavorite: ");
+                        }
+                );
 
-        new Thread(() -> {
-            mealsRepositoryImp.addFavoriteMeal(mealsItem);
-        }).start();
     }
 
     @Override
     public void addToPlan(MealsItem mealsItem) {
-        new Thread(() -> {
-            mealsRepositoryImp.addPlanMeal(mealsItem);
-        }).start();
+            mealsRepositoryImp.addPlanMeal(mealsItem)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {
+                        mealDetailsFragmentContract.showSuccessMessage("Added");
+                    },throwable -> {
+                        mealDetailsFragmentContract.showError("Not Added");
+                    });
+
     }
 
 

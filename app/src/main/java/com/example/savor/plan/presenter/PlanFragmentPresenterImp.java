@@ -1,13 +1,10 @@
 package com.example.savor.plan.presenter;
 
-import android.util.Log;
+import com.example.savor.model.MealsRepositoryImp;
 
-import androidx.lifecycle.LiveData;
-
-import com.example.savor.remote.model.MealsRepositoryImp;
-import com.example.savor.remote.model.pojo.MealsItem;
-
-import java.util.List;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class PlanFragmentPresenterImp implements PlanFragmentPresenter{
     MealsRepositoryImp mealsRepositoryImp;
@@ -20,16 +17,30 @@ public class PlanFragmentPresenterImp implements PlanFragmentPresenter{
 
 
     @Override
-    public LiveData<List<MealsItem>> showPlan() {
-        return mealsRepositoryImp.getPlaneMeals();
+    public void showPlan() {
+        Disposable subscribe = mealsRepositoryImp.getPlaneMeals()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        mealsItemList -> {
+                            planFragmentContract.showPlanMeals(mealsItemList);
+                        }, throwable -> {
+                            planFragmentContract.showError("NO Plan");
+                        }
+                );
     }
 
     @Override
     public void deleteFromPlan(String id) {
+        mealsRepositoryImp.deleteMealFromPlan(id)
+                .andThen(mealsRepositoryImp.deleteUnUsedMeals())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    planFragmentContract.showSuccessMsg("Deleted");
+                }, throwable -> {
+                    planFragmentContract.showError("Not Deleted");
+                });
 
-        new Thread(() -> {
-
-            mealsRepositoryImp.deleteMealFromPlan(id);
-        }).start();
     }
 }
