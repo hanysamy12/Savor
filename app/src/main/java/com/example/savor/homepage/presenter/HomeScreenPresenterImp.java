@@ -83,7 +83,7 @@ public class HomeScreenPresenterImp implements HomeScreenPresenter {
 
 
     private void getHomeMeals() {
-        String[] charsList = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"};
+        String[] charsList = {"a", "b", "c", "d", "e", "f", "g", "h", "j", "k"};
         Random random = new Random();
         int rIndex = random.nextInt(charsList.length);
         String randomChar = charsList[rIndex];

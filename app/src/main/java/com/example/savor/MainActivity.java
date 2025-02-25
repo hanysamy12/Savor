@@ -13,6 +13,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.savor.remote.authentication.firestore.FireStore;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 //userName honysamy@gmail.com
@@ -28,7 +29,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String STORED_DATE = "dateOfTheCurrentDay";
     public static final String PRES_NAME = "PREF";
     public static final String TODAY_MEAL_ID ="mealId";
-    public static final String  IS_ONLINE = "isOnline";
+    public static final String IS_ONLINE = "isOnline";
+
+
     public static boolean isSplashed = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+String userName =sharedPreferences.getString(MainActivity.USER_NAME,null);
+        FireStore fireStore=new FireStore(this);
+        //fireStore.UploadData(userName);
+        fireStore.getData();
     }
 
     @Override

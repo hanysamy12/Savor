@@ -96,7 +96,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
                             () -> {
                                 mealDetailsFragmentContract.showSuccessMessage("Added");
                             }, throwable -> {
-                                mealDetailsFragmentContract.showError("notAdded");
+                                //mealDetailsFragmentContract.showError("notAdded");
                                 Log.i(TAG, "NotaddedToFavorite: ");
                             }
                     );
@@ -115,7 +115,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
                     .subscribe(() -> {
                         mealDetailsFragmentContract.showSuccessMessage("Added");
                     }, throwable -> {
-                        mealDetailsFragmentContract.showError("Not Added");
+                       // mealDetailsFragmentContract.showError("Not Added");
                     });
         }
     }

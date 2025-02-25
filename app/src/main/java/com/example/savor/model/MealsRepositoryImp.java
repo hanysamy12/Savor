@@ -116,5 +116,15 @@ public class MealsRepositoryImp implements MealsRepositoryInterface {
         return mealsLocalDataSource.getMealsItemDao().getMealById(mealId);
     }
 
+    @Override
+    public Flowable<List<MealsItem>> getAllMeals() {
+        return mealsLocalDataSource.getMealsItemDao().getAllMeals();
+    }
+
+    @Override
+    public void doBackup(String userEmail) {
+
+    }
+
 
 }

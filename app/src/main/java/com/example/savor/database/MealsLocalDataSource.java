@@ -16,7 +16,7 @@ public abstract class MealsLocalDataSource extends RoomDatabase {
     public static synchronized MealsLocalDataSource getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext()
-                    , MealsLocalDataSource.class,"favoritedb" ).build();
+                    , MealsLocalDataSource.class,"mealsdb" ).build();
         }
         return instance;
     }

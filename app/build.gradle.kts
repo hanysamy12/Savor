@@ -62,6 +62,17 @@ dependencies {
     //Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.google.firebase.auth)
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
+
+    // Declare the dependency for the Cloud Firestore library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-firestore")
+/*    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
+    // Add the dependency for the Cloud Storage library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-storage")*/
     //Room
     implementation (libs.room.runtime)
     annotationProcessor (libs.room.compiler)

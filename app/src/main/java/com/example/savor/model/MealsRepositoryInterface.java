@@ -32,4 +32,6 @@ public interface MealsRepositoryInterface {
     Flowable<List<MealsItem>> getPlaneMeals();
     Completable deleteUnUsedMeals();
     Flowable<List<MealsItem>> getStoredMealById(String mealId);
+    Flowable<List<MealsItem>> getAllMeals();
+    void doBackup(String userEmail);
 }

@@ -42,7 +42,7 @@ public class Authentication {
                         String message = "Tray Again Later";
                         //user already registered
                         if (e instanceof FirebaseAuthUserCollisionException) {
-                            message = "Use existed";
+                            message = "User existed";
                         }
                         // Handle network connection issues (e.g., no internet)
                         else if (e instanceof IOException) {
