@@ -1,7 +1,10 @@
 package com.example.savor.mealdetails.presenter;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.example.savor.MainActivity;
 import com.example.savor.model.MealsRepositoryImp;
 import com.example.savor.model.pojo.MealsItem;
 
@@ -16,68 +19,105 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
     MealDetailsFragmentContract mealDetailsFragmentContract;
     List<String> ingredienList;
     List<String> measureList;
+    Context context;
+    SharedPreferences sharedPreferences;
+    String userName;
     private static final String TAG = "MealDetailsPresenterImp";
 
-    public MealDetailsPresenterImp(MealsRepositoryImp mealsRepositoryImp, MealDetailsFragmentContract mealDetailsFragmentContract) {
+    public MealDetailsPresenterImp(MealsRepositoryImp mealsRepositoryImp, MealDetailsFragmentContract mealDetailsFragmentContract, Context context) {
         this.mealsRepositoryImp = mealsRepositoryImp;
         this.mealDetailsFragmentContract = mealDetailsFragmentContract;
+        this.context = context;
+        sharedPreferences = context.getSharedPreferences(MainActivity.PRES_NAME, Context.MODE_PRIVATE);
+        userName = sharedPreferences.getString(MainActivity.USER_NAME, null);
 
     }
 
     @Override
     public void getMealById(Integer mealId) {
+        boolean isOnline = sharedPreferences.getBoolean(MainActivity.IS_ONLINE, false);
+        if (!isOnline) {
+            mealsRepositoryImp.getStoredMealById(String.valueOf(mealId))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(mealsItemResponse -> {
+                        MealsItem meal = mealsItemResponse.get(0);
+                        ingredienList = new ArrayList<>();
+                        measureList = new ArrayList<>();
+                        for (int i = 1; i <= 20; i++) {
+                            String ingredient = getValidIngredient(meal, i);
+                            String measure = getMeasure(meal, i);
 
-        mealsRepositoryImp.getMealById(mealId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mealsItemResponse -> {
-                    MealsItem meal = mealsItemResponse.getMeals().get(0);
-                    ingredienList = new ArrayList<>();
-                    measureList = new ArrayList<>();
-                    for (int i = 1; i <= 20; i++) {
-                        String ingredient = getValidIngredient(meal, i);
-                        String measure = getMeasure(meal, i);
-
-                        if (ingredient != null && !ingredient.isEmpty()) {
-                            ingredienList.add(ingredient);
-                            measureList.add(measure);
+                            if (ingredient != null && !ingredient.isEmpty()) {
+                                ingredienList.add(ingredient);
+                                measureList.add(measure);
+                            }
                         }
-                    }
 
-                    mealDetailsFragmentContract.showMealDetails(mealsItemResponse.getMeals().get(0), ingredienList, measureList);
-                }, throwable -> {
-                    mealDetailsFragmentContract.showError(throwable.getMessage());
-                });
+                        mealDetailsFragmentContract.showMealDetails(mealsItemResponse.get(0), ingredienList, measureList);
+                    }, throwable -> {
+                        mealDetailsFragmentContract.showError(throwable.getMessage());
+                    });
+        }
+        else {
+            mealsRepositoryImp.getMealById(mealId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(mealsItemResponse -> {
+                        MealsItem meal = mealsItemResponse.getMeals().get(0);
+                        ingredienList = new ArrayList<>();
+                        measureList = new ArrayList<>();
+                        for (int i = 1; i <= 20; i++) {
+                            String ingredient = getValidIngredient(meal, i);
+                            String measure = getMeasure(meal, i);
 
+                            if (ingredient != null && !ingredient.isEmpty()) {
+                                ingredienList.add(ingredient);
+                                measureList.add(measure);
+                            }
+                        }
+
+                        mealDetailsFragmentContract.showMealDetails(mealsItemResponse.getMeals().get(0), ingredienList, measureList);
+                    }, throwable -> {
+                        mealDetailsFragmentContract.showError(throwable.getMessage());
+                    });
+        }
     }
 
     @Override
     public void addToFavorite(MealsItem mealsItem) {
-        mealsRepositoryImp.addFavoriteMeal(mealsItem)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        () -> {
-                            mealDetailsFragmentContract.showSuccessMessage("Added");
-                        },throwable -> {
-                            mealDetailsFragmentContract.showError("notAdded");
-                            Log.i(TAG, "NotaddedToFavorite: ");
-                        }
-                );
-
+        if (userName == null) {
+            mealDetailsFragmentContract.showError("Login To add To Favorite");
+        } else {
+            mealsRepositoryImp.addFavoriteMeal(mealsItem)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            () -> {
+                                mealDetailsFragmentContract.showSuccessMessage("Added");
+                            }, throwable -> {
+                                mealDetailsFragmentContract.showError("notAdded");
+                                Log.i(TAG, "NotaddedToFavorite: ");
+                            }
+                    );
+        }
     }
 
     @Override
     public void addToPlan(MealsItem mealsItem) {
+
+        if (userName==null) {
+            mealDetailsFragmentContract.showError("Login To add To Plan");
+        } else {
             mealsRepositoryImp.addPlanMeal(mealsItem)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(() -> {
                         mealDetailsFragmentContract.showSuccessMessage("Added");
-                    },throwable -> {
+                    }, throwable -> {
                         mealDetailsFragmentContract.showError("Not Added");
                     });
-
+        }
     }
 
 

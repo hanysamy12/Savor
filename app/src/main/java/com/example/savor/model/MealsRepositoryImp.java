@@ -71,47 +71,7 @@ public class MealsRepositoryImp implements MealsRepositoryInterface {
         return mealsRemoteDataSource.filterByCounter(countryName);
     }
 
-  /*  @Override
-    public void getMealsByChar(String firstCharacter, MealsCallBack<MealsItemResponse>mealsCallBack) {
-        mealsRemoteDataSource.getMealsByChar(firstCharacter,mealsCallBack);
-        Log.i(TAG, "getMealsByChar: ");
-    }
 
-    @Override
-    public void getMealById(Integer id ,MealsCallBack<MealsItemResponse>mealsCallBack) {
-        mealsRemoteDataSource.getMealById(id,mealsCallBack);
-    }
-
-    @Override
-    public void getAllCategories(MealsCallBack<CategoriesResponse>mealsCallBack) {
-        mealsRemoteDataSource.getAllCategories(mealsCallBack);
-    }
-
-    @Override
-    public void getAllAreas(MealsCallBack<AreaResponse>mealsCallBack) {
-        mealsRemoteDataSource.getAllAreas(mealsCallBack);
-    }
-
-    @Override
-    public void getAllIngredient(MealsCallBack<IngredientResponse>mealsCallBack) {
-        mealsRemoteDataSource.getAllIngredient(mealsCallBack);
-    }
-
-    @Override
-    public void filterByCategory(String categoryName, MealsCallBack<FilteredResponse> mealsCallBack) {
-        mealsRemoteDataSource.filterByCategory(categoryName,mealsCallBack);
-    }
-
-    @Override
-    public void filterByIngredient(String ingredientName, MealsCallBack<FilteredResponse> mealsCallBack) {
-        mealsRemoteDataSource.filterByIngredient(ingredientName,mealsCallBack);
-    }
-
-    @Override
-    public void filterCountry(String countryName, MealsCallBack<FilteredResponse> mealsCallBack) {
-        mealsRemoteDataSource.filterByCounter(countryName,mealsCallBack);
-    }
-*/
     @Override
     public Completable addFavoriteMeal(MealsItem mealsItem) {
         Log.i(TAG, "addFavoriteMeal: ");
@@ -149,6 +109,11 @@ public class MealsRepositoryImp implements MealsRepositoryInterface {
     @Override
     public Completable deleteUnUsedMeals() {
         return mealsLocalDataSource.getMealsItemDao().deleteMeal();
+    }
+
+    @Override
+    public Flowable<List<MealsItem>> getStoredMealById(String mealId) {
+        return mealsLocalDataSource.getMealsItemDao().getMealById(mealId);
     }
 
 

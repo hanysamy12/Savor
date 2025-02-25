@@ -6,5 +6,7 @@ public interface HomeScreenContract {
     void showRandomMeal(MealsItemResponse mealsItemResponse);
     void showErrorMsg(String errorMsg);
     void showHomeMeals(MealsItemResponse mealsItemResponse);
+    void showLotti();
+    void hideLotti();
 
 }

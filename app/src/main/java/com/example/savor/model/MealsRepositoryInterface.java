@@ -31,4 +31,5 @@ public interface MealsRepositoryInterface {
     Completable deleteMealFromPlan(String id);
     Flowable<List<MealsItem>> getPlaneMeals();
     Completable deleteUnUsedMeals();
+    Flowable<List<MealsItem>> getStoredMealById(String mealId);
 }

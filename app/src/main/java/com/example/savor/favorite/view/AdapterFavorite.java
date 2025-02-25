@@ -1,5 +1,7 @@
 package com.example.savor.favorite.view;
 
+import static android.view.View.GONE;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +57,11 @@ public class AdapterFavorite extends RecyclerView.Adapter<AdapterFavorite.ViewHo
         holder.imgDelete.setOnClickListener(view -> {
             listener.onDeleteClicked(mealsIteList.get(position).getIdMeal());
         });
+        if(mealsIteList.get(position).getDate()==null) {
+            holder.txtDate.setVisibility(GONE);
+        }else{
         holder.txtDate.setText(mealsIteList.get(position).getDate());
+        }
         holder.constraintLayout.setOnClickListener(view -> {
             listener.onMealClicked(mealsIteList.get(position).getIdMeal());
         });

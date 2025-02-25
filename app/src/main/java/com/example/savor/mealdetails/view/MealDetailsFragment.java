@@ -72,7 +72,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false);
         recyclerViewIngredient.setLayoutManager(layoutManager);
         mealDetailsPresenterImp = new MealDetailsPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(requireContext()))
-                , this);
+                , this,requireContext());
         mealDetailsPresenterImp.getMealById(Integer.valueOf(mealId));
         imgAddToPlan.setOnClickListener(view1 -> {
             showDatePicker();

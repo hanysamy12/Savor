@@ -5,10 +5,10 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#01404F"
+    android:background="@color/color_main_background"
     tools:context=".MainActivity">
 
-    <TextView
+   <!-- <TextView
         android:id="@+id/txtSavorTop"
         style="@style/SavorTextStyle"
         android:layout_width="wrap_content"
@@ -19,11 +19,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
+-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomMenue"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:visibility="gone"
         app:itemIconTint="@color/primary_color"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,13 +35,12 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@id/bottomMenue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtSavorTop"
+        app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph" />
 </androidx.constraintlayout.widget.ConstraintLayout>

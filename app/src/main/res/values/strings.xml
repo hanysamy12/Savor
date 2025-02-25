@@ -16,7 +16,7 @@
     <string name="sign_up_with_google">Sign-up With Google</string>
     <string name="sign_in">I have an Account</string>
     <string name="meal_of_today">Meal Of Today</string>
-    <string name="egyptian_meals">Meal For You</string>
+    <string name="egyptian_meals">Meals For You</string>
     <string name="skip">Skip</string>
     <string name="view_all_meals">View All</string>
     <string name="all_meals">All Meals</string>
@@ -118,4 +118,5 @@
     <string name="favorite_meals">Favorite Meals</string>
     <string name="plane">Plane</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="connecton_lost">Connecton Lost</string>
 </resources>

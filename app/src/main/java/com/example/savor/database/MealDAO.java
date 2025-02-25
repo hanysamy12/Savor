@@ -20,6 +20,9 @@ public interface MealDAO {
     @Query("Select * from MealsItem where date not null")
     Flowable<List<MealsItem>> getPlanMeals();
 
+    @Query("Select * from MealsItem where idMeal = :mealId")
+    Flowable<List<MealsItem>> getMealById(String mealId);
+
     @Query("UPDATE MealsItem SET isFavorite = 0 WHERE idMeal = :id")
     Completable removeFromFavorite(String id);
 

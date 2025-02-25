@@ -28,10 +28,27 @@ public class HomeScreenPresenterImp implements HomeScreenPresenter {
         sharedPreferences = context.getSharedPreferences(MainActivity.PRES_NAME, Context.MODE_PRIVATE);
     }
 
-
     @Override
-    public void getRandomMeal() {
-        String prefDate = sharedPreferences.getString(MainActivity.PREF_DATE, null);
+    public void handelOnConnectionChanges(Boolean isOnline) {
+
+        if(!isOnline || isOnline == null)
+        {homeScreenContract.showLotti();
+
+        }else {
+            getHomeContent();
+        }
+    }
+    public void getHomeContent()
+    {
+        homeScreenContract.hideLotti();
+        getRandomMeal();
+        getHomeMeals();
+
+    }
+
+
+    private void getRandomMeal() {
+        String prefDate = sharedPreferences.getString(MainActivity.STORED_DATE, null);
         if (isTheSameDate(prefDate)) {
             String storedMealId = sharedPreferences.getString(MainActivity.TODAY_MEAL_ID, null);
             Log.i(TAG, "The Same Meal : " + storedMealId);
@@ -41,12 +58,13 @@ public class HomeScreenPresenterImp implements HomeScreenPresenter {
                     .subscribe(meal -> {
                         homeScreenContract.showRandomMeal(meal);
                     }, throwable -> {
-                        homeScreenContract.showErrorMsg(throwable.getMessage());
+                        Log.i(TAG, "getRandomMeal: Faild");
+                      //  homeScreenContract.showErrorMsg(throwable.getMessage());
                     });
         } else {
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            editor.putString(MainActivity.PREF_DATE, currentDate);
+            editor.putString(MainActivity.STORED_DATE, currentDate);
             mealsRepository.getRandomMeal()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -55,15 +73,16 @@ public class HomeScreenPresenterImp implements HomeScreenPresenter {
                         editor.apply();
                         homeScreenContract.showRandomMeal(meal);
                     }, throwable -> {
-                        homeScreenContract.showErrorMsg(throwable.getMessage());
+                        Log.i(TAG, "getRandomMeal: Faild");
+                        //homeScreenContract.showErrorMsg(throwable.getMessage());
                     });
 
 
         }
     }
 
-    @Override
-    public void getHomeMeals() {
+
+    private void getHomeMeals() {
         String[] charsList = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"};
         Random random = new Random();
         int rIndex = random.nextInt(charsList.length);
@@ -75,10 +94,12 @@ public class HomeScreenPresenterImp implements HomeScreenPresenter {
                 .subscribe(meals -> {
                     homeScreenContract.showHomeMeals(meals);
                 }, throwable -> {
-                    homeScreenContract.showErrorMsg(throwable.getMessage());
+                    Log.i(TAG, "getHomeMeals: failed");
+                 //   homeScreenContract.showErrorMsg(throwable.getMessage());
                 });
 
     }
+
 
     private boolean isTheSameDate(String date) {
         Calendar calendar = Calendar.getInstance();

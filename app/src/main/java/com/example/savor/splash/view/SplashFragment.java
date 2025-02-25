@@ -28,6 +28,7 @@ public class SplashFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+
         return inflater.inflate(R.layout.fragment_splash, container, false);
     }
 
@@ -50,7 +51,12 @@ public class SplashFragment extends Fragment {
                         .build();
                 navController.navigate(R.id.loginFragment, null, navOptions);
             }
-        }, 2000);
+        }, 3000);
         }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MainActivity.isSplashed=true;
+    }
 }

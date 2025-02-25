@@ -43,13 +43,15 @@
 
             <TextView
                 android:id="@+id/txtMealDate"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:paddingVertical="2dp"
+                android:paddingHorizontal="7dp"
+                android:background="@drawable/bg_rounded_colored"
                 android:textColor="@color/primary_color"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imgDeleteFavorite"
                 app:layout_constraintStart_toEndOf="@+id/imgMealFavorite"
                 app:layout_constraintTop_toBottomOf="@id/txtMealNameFavorite"
                 app:layout_constraintVertical_bias="0.5" />
