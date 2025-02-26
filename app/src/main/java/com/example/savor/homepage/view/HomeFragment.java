@@ -75,14 +75,6 @@ public class HomeFragment extends Fragment implements HomeScreenContract, OnClic
         recyclerViewHome.setLayoutManager(layoutManager);
         homeScreenPresenterImp = new HomeScreenPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(requireContext()))
                 , this, requireContext());
-      /*  if(!isOnline)
-        {
-            homeScreenPresenterImp.handelOnConnectionLost(isOnline);
-        }else {
-            homeScreenPresenterImp.getHomeContent();
-            //homeScreenPresenterImp.getRandomMeal();
-            //homeScreenPresenterImp.getHomeMeals();
-        }*/
 
         homeScreenPresenterImp.handelOnConnectionChanges(isOnline);
 
@@ -97,9 +89,10 @@ public class HomeFragment extends Fragment implements HomeScreenContract, OnClic
                 .apply(new RequestOptions()
                         .fitCenter()
                         .placeholder(R.drawable.ic_launcher_background)
-                        .error(R.drawable.ic_launcher_foreground)).into(imgRandomMeal);
+                        .error(R.drawable.ic_launcher_background)).into(imgRandomMeal);
         imgRandomMeal.setOnClickListener(view -> {
-            HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealsItemResponse.getMeals().get(0).getIdMeal());
+            HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealsItemResponse.getMeals().get(0).getIdMeal());
             Navigation.findNavController(view).navigate(action);
         });
     }

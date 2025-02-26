@@ -89,9 +89,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 String userName =sharedPreferences.getString(MainActivity.USER_NAME,null);
-        FireStore fireStore=new FireStore(this);
-        //fireStore.UploadData(userName);
-        fireStore.getData();
+
     }
 
     @Override

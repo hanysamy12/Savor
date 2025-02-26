@@ -31,7 +31,7 @@
         <ImageView
             android:id="@+id/imageMealDetails"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_background"
             app:layout_constraintEnd_toEndOf="parent"

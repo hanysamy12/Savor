@@ -104,7 +104,7 @@ public class LoginFragment extends Fragment implements LoginFragmentContract {
     public void onLoginSuccess(String userName) {
         btnLogin.setVisibility(VISIBLE);
         loginProgressBar.setVisibility(INVISIBLE);
-        Toast.makeText(requireContext(), userName, Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), userName.substring(0,5), Toast.LENGTH_SHORT).show();
         NavController navController = Navigation.findNavController(requireView());
         NavOptions navOptions = new NavOptions.Builder()
                 .setPopUpTo(R.id.loginFragment,true)

@@ -1,6 +1,11 @@
 package com.example.savor.plan.view;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,31 +14,26 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.example.savor.R;
 import com.example.savor.database.MealsLocalDataSource;
 import com.example.savor.favorite.presenter.OnClickListener;
 import com.example.savor.favorite.view.AdapterFavorite;
-import com.example.savor.plan.presenter.PlanFragmentContract;
-import com.example.savor.plan.presenter.PlanFragmentPresenter;
-import com.example.savor.plan.presenter.PlanFragmentPresenterImp;
 import com.example.savor.model.MealsRemoteDataSource;
 import com.example.savor.model.MealsRepositoryImp;
 import com.example.savor.model.pojo.MealsItem;
+import com.example.savor.plan.presenter.PlanFragmentContract;
+import com.example.savor.plan.presenter.PlanFragmentPresenter;
+import com.example.savor.plan.presenter.PlanFragmentPresenterImp;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlanFragment extends Fragment implements PlanFragmentContract, OnClickListener {
-PlanFragmentPresenter planFragmentPresenter;
-AdapterFavorite adapterFavorite;
-RecyclerView recyclerView;
+    PlanFragmentPresenter planFragmentPresenter;
+    AdapterFavorite adapterFavorite;
+    RecyclerView recyclerView;
     private static final String TAG = "PlanFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,13 +44,13 @@ RecyclerView recyclerView;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView=view.findViewById(R.id.recyclerViewPlan);
+        recyclerView = view.findViewById(R.id.recyclerViewPlan);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         planFragmentPresenter = new PlanFragmentPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance()
-                , MealsLocalDataSource.getInstance(requireContext())),this);
+                , MealsLocalDataSource.getInstance(requireContext())), this);
         planFragmentPresenter.showPlan();
-        adapterFavorite = new AdapterFavorite(requireContext(), new ArrayList<>(),this);
+        adapterFavorite = new AdapterFavorite(requireContext(), new ArrayList<>(), this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapterFavorite);
 

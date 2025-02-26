@@ -45,7 +45,7 @@ public class AdapterIngredientMealDetails extends RecyclerView.Adapter<AdapterIn
                 .apply(new RequestOptions()
                         .fitCenter()
                        // .placeholder(R.drawable.ic_search)
-                        .error(R.drawable.ic_app)).into(holder.imgIngredient);
+                        .error(R.drawable.ic_launcher_background)).into(holder.imgIngredient);
     }
 
     @Override

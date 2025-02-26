@@ -91,7 +91,9 @@ public class MealsRepositoryImp implements MealsRepositoryInterface {
 
     @Override
     public Completable addPlanMeal(MealsItem mealsItem) {
+        Log.i(TAG, "addPlanMeal: "+mealsItem.getStrMeal());
         return mealsLocalDataSource.getMealsItemDao().insertMeal(mealsItem);
+
     }
 
     @Override
@@ -122,8 +124,8 @@ public class MealsRepositoryImp implements MealsRepositoryInterface {
     }
 
     @Override
-    public void doBackup(String userEmail) {
-
+    public Completable cleanDataBase() {
+        return mealsLocalDataSource.getMealsItemDao().deleteAllMeals();
     }
 
 

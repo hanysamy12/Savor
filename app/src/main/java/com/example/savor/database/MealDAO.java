@@ -39,4 +39,8 @@ public interface MealDAO {
     @Query("delete from MealsItem where date is null and isFavorite = 0")
     Completable deleteMeal();
 
+    @Query("delete from MealsItem")
+    Completable deleteAllMeals();
+
+
 }

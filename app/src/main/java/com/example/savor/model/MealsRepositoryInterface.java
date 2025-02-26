@@ -33,5 +33,5 @@ public interface MealsRepositoryInterface {
     Completable deleteUnUsedMeals();
     Flowable<List<MealsItem>> getStoredMealById(String mealId);
     Flowable<List<MealsItem>> getAllMeals();
-    void doBackup(String userEmail);
+    Completable cleanDataBase();
 }

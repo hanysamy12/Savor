@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.savor.MainActivity;
+import com.example.savor.remote.authentication.firestore.FireStore;
 import com.example.savor.remote.authentication.model.AuthenticationCallBack;
 import com.example.savor.remote.authentication.model.AuthenticationRepo;
 
@@ -12,10 +13,12 @@ public class LoginPresenterImp implements AuthenticationCallBack, LoginPresenter
     LoginFragmentContract loginFragmentContract;
     SharedPreferences sharedPreferences;
     Context context;
+    FireStore fireStore;
     public LoginPresenterImp(AuthenticationRepo authenticationRepo ,LoginFragmentContract loginFragmentContract,Context context) {
         this.loginFragmentContract = loginFragmentContract;
         this.authenticationRepo = authenticationRepo;
         this.context = context;
+        fireStore = new FireStore(context);
     }
 
     @Override
@@ -33,6 +36,7 @@ public class LoginPresenterImp implements AuthenticationCallBack, LoginPresenter
         editor.putString(MainActivity.USER_NAME,email);
         editor.apply(); //async
         loginFragmentContract.onLoginSuccess(email);
+        fireStore.getData(email);
     }
 
     @Override
