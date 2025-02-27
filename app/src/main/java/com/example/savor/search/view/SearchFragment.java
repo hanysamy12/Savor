@@ -22,12 +22,14 @@ import android.widget.EditText;
 
 import com.example.savor.R;
 import com.example.savor.database.MealsLocalDataSource;
+import com.example.savor.homepage.view.AdapterHomeList;
 import com.example.savor.model.MealsRemoteDataSource;
 import com.example.savor.model.MealsRepositoryImp;
 import com.example.savor.model.pojo.AreaResponse;
 import com.example.savor.model.pojo.CategoriesResponse;
 import com.example.savor.model.pojo.FilteredResponse;
 import com.example.savor.model.pojo.IngredientResponse;
+import com.example.savor.model.pojo.MealsItemResponse;
 import com.example.savor.search.presenter.OnClickListenerArea;
 import com.example.savor.search.presenter.OnClickListenerCategory;
 import com.example.savor.search.presenter.OnClickListenerIngredient;
@@ -149,6 +151,8 @@ public class SearchFragment extends Fragment implements SearchFragmentContract
         });
         recyclerView.setAdapter(adapterSearchMeals);
     }
+
+
 
     @Override
     public void showError(String errorNsg) {

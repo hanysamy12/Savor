@@ -4,6 +4,7 @@ import com.example.savor.model.pojo.AreaResponse;
 import com.example.savor.model.pojo.CategoriesResponse;
 import com.example.savor.model.pojo.FilteredResponse;
 import com.example.savor.model.pojo.IngredientResponse;
+import com.example.savor.model.pojo.MealsItemResponse;
 
 public interface SearchFragmentContract {
     void showAllCategories(CategoriesResponse categoriesResponse);

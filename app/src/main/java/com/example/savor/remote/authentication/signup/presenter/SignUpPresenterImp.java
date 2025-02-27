@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.savor.MainActivity;
-import com.example.savor.remote.authentication.model.AuthenticationCallBack;
-import com.example.savor.remote.authentication.model.AuthenticationRepo;
+import com.example.savor.remote.presenter.AuthenticationCallBack;
+import com.example.savor.remote.presenter.AuthenticationRepo;
 
 public class SignUpPresenterImp implements SignUpPresenter, AuthenticationCallBack {
     AuthenticationRepo authenticationRepo;

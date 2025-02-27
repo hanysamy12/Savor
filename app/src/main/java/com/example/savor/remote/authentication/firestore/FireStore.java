@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -31,7 +32,6 @@ public class FireStore {
     SharedPreferences sharedPreferences;
     Context context;
 
-
     public FireStore(Context context) {
         this.context = context;
         mealsRepositoryImp = new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(context));
@@ -43,7 +43,9 @@ public class FireStore {
     public void uploadData() {
         String userEmail = sharedPreferences.getString(MainActivity.USER_NAME, null);
         if (userEmail != null) {
-            Disposable subscribe = getStoredMeals()
+
+            }
+        Disposable subscribe = getStoredMeals()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(meals -> {
@@ -77,7 +79,7 @@ public class FireStore {
                     });
 
 
-        }
+
     }
 
 
@@ -132,7 +134,7 @@ public class FireStore {
         }
     }
 
-    private Flowable<List<Map<String, Object>>> getStoredMeals() {
+    private Single<List<Map<String, Object>>> getStoredMeals() {
         return mealsRepositoryImp.getAllMeals()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -148,7 +150,7 @@ public class FireStore {
                         .collect(Collectors.toList()))
                 .doOnError(throwable -> {
                     Log.i(TAG, "getStoredMeals: Failed", throwable);
-                });
+                }).firstOrError();
     }
 
 }

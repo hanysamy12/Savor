@@ -1,4 +1,6 @@
-package com.example.savor.remote.authentication.model;
+package com.example.savor.remote.presenter;
+
+import android.app.Activity;
 
 public class AuthenticationRepoImp implements AuthenticationRepo {
     Authentication authentication;
@@ -14,5 +16,10 @@ public class AuthenticationRepoImp implements AuthenticationRepo {
     @Override
     public void signUp(String userName, String password, AuthenticationCallBack authenticationCallBack) {
         authentication.signUp(userName,password,authenticationCallBack);
+    }
+
+    @Override
+    public void googleLogin(Activity activity, AuthenticationCallBack authenticationCallBack) {
+        authentication.googleSignIn(activity,authenticationCallBack);
     }
 }

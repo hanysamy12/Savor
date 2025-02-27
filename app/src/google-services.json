@@ -14,15 +14,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "318047228197-l1egji3bv7ebm79f4kavk20sks2u4ap6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.savor",
-            "certificate_hash": "4f62ffb7ea821ab6f2cac05c542b38bded81f847"
-          }
-        },
-        {
-          "client_id": "318047228197-sf493e5m8nr3flbtlvaa510a8t83lu4q.apps.googleusercontent.com",
+          "client_id": "318047228197-luro5sf8qs1ijat2vasciiumro7j4pkg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

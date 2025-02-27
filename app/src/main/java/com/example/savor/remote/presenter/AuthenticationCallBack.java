@@ -1,4 +1,4 @@
-package com.example.savor.remote.authentication.model;
+package com.example.savor.remote.presenter;
 
 public interface AuthenticationCallBack {
     void onSuccess(String email);

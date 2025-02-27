@@ -9,7 +9,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,7 +61,7 @@ public class PlanFragment extends Fragment implements PlanFragmentContract, OnCl
 
     @Override
     public void onDeleteClicked(String id) {
-        planFragmentPresenter.deleteFromPlan(id);
+        showDialog(id);
         Log.i(TAG, "onPlanClicked: ");
     }
 
@@ -82,4 +85,20 @@ public class PlanFragment extends Fragment implements PlanFragmentContract, OnCl
     public void showError(String errorMsg) {
         Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
     }
+
+    private void showDialog(String id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Attention")
+                .setMessage("Are You Sure")
+                .setPositiveButton("yes", (dialog, i) -> {
+                    planFragmentPresenter.deleteFromPlan(id);
+                    dialog.dismiss();
+                })
+                .setNegativeButton("No", (dialogInterface, i) -> {
+                    Toast.makeText(requireContext(), "Right", Toast.LENGTH_SHORT).show();
+                })
+                .setCancelable(true);
+        builder.create().show();
+    }
+
 }

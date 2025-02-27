@@ -17,6 +17,8 @@ public interface MealsRepositoryInterface {
     Single<MealsItemResponse> getRandomMeal();
     Single<MealsItemResponse> getMealsByChar(String firstCharacter);
     Single<MealsItemResponse> getMealById(Integer id);
+    Single<MealsItemResponse> getMealByName(String mealName);
+
     Single<CategoriesResponse> getAllCategories();
     Single<AreaResponse> getAllAreas();
     Single<IngredientResponse> getAllIngredient();

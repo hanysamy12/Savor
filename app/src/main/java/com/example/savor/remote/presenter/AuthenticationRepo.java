@@ -1,6 +1,9 @@
-package com.example.savor.remote.authentication.model;
+package com.example.savor.remote.presenter;
+
+import android.app.Activity;
 
 public interface AuthenticationRepo {
     void login(String userName , String password , AuthenticationCallBack authenticationCallBack);
     void signUp(String userName , String password ,AuthenticationCallBack authenticationCallBack);
+    void googleLogin(Activity activity ,AuthenticationCallBack authenticationCallBack);
 }

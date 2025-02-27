@@ -1,18 +1,18 @@
 package com.example.savor.favorite.view;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.savor.R;
 import com.example.savor.database.MealsLocalDataSource;
@@ -33,6 +33,7 @@ public class FavoriteFragment extends Fragment implements FavoriteFragmentContra
     AdapterFavorite adapterFavorite;
 
     private static final String TAG = "FavoriteFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class FavoriteFragment extends Fragment implements FavoriteFragmentContra
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         favoritePresenterImp.showMeals();
-        adapterFavorite = new AdapterFavorite(requireContext(), new ArrayList<>(),this);
+        adapterFavorite = new AdapterFavorite(requireContext(), new ArrayList<>(), this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapterFavorite);
 
@@ -73,7 +74,7 @@ public class FavoriteFragment extends Fragment implements FavoriteFragmentContra
 
     @Override
     public void onDeleteClicked(String id) {
-        favoritePresenterImp.deleteMeal(id);
+        showDialog(id);
     }
 
     @Override
@@ -81,5 +82,20 @@ public class FavoriteFragment extends Fragment implements FavoriteFragmentContra
         FavoriteFragmentDirections.ActionFavoriteFragmentToMealDetailsFragment action =
                 FavoriteFragmentDirections.actionFavoriteFragmentToMealDetailsFragment(id);
         Navigation.findNavController(recyclerView).navigate(action);
+    }
+
+    private void showDialog(String id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Attention")
+                .setMessage("Are You Sure")
+                .setPositiveButton("yes", (dialog, i) -> {
+                    favoritePresenterImp.deleteMeal(id);
+                    dialog.dismiss();
+                })
+                .setNegativeButton("No", (dialogInterface, i) -> {
+                    Toast.makeText(requireContext(), "Right", Toast.LENGTH_SHORT).show();
+                })
+                .setCancelable(true);
+        builder.create().show();
     }
 }

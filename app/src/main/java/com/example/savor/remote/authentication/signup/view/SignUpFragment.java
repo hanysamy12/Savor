@@ -22,11 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.savor.R;
-import com.example.savor.remote.authentication.model.Authentication;
-import com.example.savor.remote.authentication.model.AuthenticationRepoImp;
+import com.example.savor.remote.presenter.Authentication;
+import com.example.savor.remote.presenter.AuthenticationRepoImp;
 import com.example.savor.remote.authentication.signup.presenter.SignUpFragmentContract;
 import com.example.savor.remote.authentication.signup.presenter.SignUpPresenterImp;
-import com.google.android.material.snackbar.Snackbar;
 
 public class SignUpFragment extends Fragment implements SignUpFragmentContract {
     SignUpPresenterImp signUpPresenterImp;

@@ -1,12 +1,13 @@
 package com.example.savor.remote.authentication.login.presenter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.savor.MainActivity;
 import com.example.savor.remote.authentication.firestore.FireStore;
-import com.example.savor.remote.authentication.model.AuthenticationCallBack;
-import com.example.savor.remote.authentication.model.AuthenticationRepo;
+import com.example.savor.remote.presenter.AuthenticationCallBack;
+import com.example.savor.remote.presenter.AuthenticationRepo;
 
 public class LoginPresenterImp implements AuthenticationCallBack, LoginPresenter {
     AuthenticationRepo authenticationRepo;
@@ -27,6 +28,10 @@ public class LoginPresenterImp implements AuthenticationCallBack, LoginPresenter
         authenticationRepo.login(userName,password,this);
     }
 
+    @Override
+    public void requestGoogleLogin(Activity activity) {
+        authenticationRepo.googleLogin(activity,this);
+    }
 
 
     @Override

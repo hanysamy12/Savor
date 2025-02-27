@@ -27,8 +27,7 @@ public class MealsRepositoryImp implements MealsRepositoryInterface {
     @Override
     public Single<MealsItemResponse> getRandomMeal() {
         return mealsRemoteDataSource.getRandomMeal();
-        /*mealsRemoteDataSource.getRandomMeal(mealsCallBack);
-        Log.i(TAG, "getRandomMeal: "+mealsCallBack);*/
+
     }
 
     @Override
@@ -40,6 +39,12 @@ public class MealsRepositoryImp implements MealsRepositoryInterface {
     public Single<MealsItemResponse> getMealById(Integer id) {
         return mealsRemoteDataSource.getMealById(id);
     }
+
+    @Override
+    public Single<MealsItemResponse> getMealByName(String mealName) {
+        return mealsRemoteDataSource.getMealByName(mealName);
+    }
+
 
     @Override
     public Single<CategoriesResponse> getAllCategories() {

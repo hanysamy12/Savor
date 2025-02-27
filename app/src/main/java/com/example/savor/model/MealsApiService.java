@@ -17,6 +17,8 @@ public interface MealsApiService {
     @GET("api/json/v1/1/search.php")
     Single<MealsItemResponse> getMealByFirstLetter(@Query("f") String firstLetter);
 
+    @GET("api/json/v1/1/search.php")
+    Single<MealsItemResponse> getMealByName(@Query("s") String mealName);
     @GET("api/json/v1/1/lookup.php")
     Single<MealsItemResponse> getMealById(@Query("i") int id);
 

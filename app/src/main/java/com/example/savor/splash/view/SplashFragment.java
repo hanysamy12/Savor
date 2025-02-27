@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 
 import com.example.savor.MainActivity;
 import com.example.savor.R;
-import com.example.savor.remote.authentication.model.Authentication;
 
 public class SplashFragment extends Fragment {
     SharedPreferences sharedPreferences;
@@ -37,6 +36,7 @@ public class SplashFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = requireContext().getSharedPreferences(MainActivity.PRES_NAME, Context.MODE_PRIVATE);
         String userName = sharedPreferences.getString(MainActivity.USER_NAME, null);
+        if(!MainActivity.isSplashed){
         new Handler().postDelayed(() -> {
             NavController navController = Navigation.findNavController(requireView());
 
@@ -51,7 +51,7 @@ public class SplashFragment extends Fragment {
                         .build();
                 navController.navigate(R.id.loginFragment, null, navOptions);
             }
-        }, 3000);
+        }, 3000);}
         }
 
     @Override

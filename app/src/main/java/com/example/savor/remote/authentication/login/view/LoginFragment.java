@@ -15,6 +15,7 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,15 +27,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.savor.R;
-import com.example.savor.remote.authentication.model.Authentication;
-import com.example.savor.remote.authentication.model.AuthenticationRepoImp;
+import com.example.savor.remote.presenter.Authentication;
+import com.example.savor.remote.presenter.AuthenticationRepoImp;
 import com.example.savor.remote.authentication.login.presenter.LoginFragmentContract;
 import com.example.savor.remote.authentication.login.presenter.LoginPresenterImp;
-import com.google.android.material.snackbar.Snackbar;
 
 public class LoginFragment extends Fragment implements LoginFragmentContract {
     private LoginPresenterImp loginPresenter;
     Button btnLogin;
+    Button btnGoogle;
     EditText txtUseName;
     EditText txtPassword;
     TextView clickableTxtCreateAccount;
@@ -64,6 +65,7 @@ public class LoginFragment extends Fragment implements LoginFragmentContract {
         txtPassword = view.findViewById(R.id.txtPasswordLogin);
         skipLogin = view.findViewById(R.id.txtSkipLogin);
         btnLogin = view.findViewById(R.id.btnLogin);
+        btnGoogle =view.findViewById(R.id.btnSignInTGoogle);
         loginProgressBar = view.findViewById(R.id.loginProgressBar);
         clickableTxtCreateAccount.setOnClickListener(view1 -> {
             Navigation.findNavController(requireView()).navigate(R.id.signUpFragment);
@@ -98,6 +100,9 @@ public class LoginFragment extends Fragment implements LoginFragmentContract {
             }
 
         });
+        btnGoogle.setOnClickListener(view1 -> {
+            loginPresenter.requestGoogleLogin(requireActivity());
+        });
     }
 
     @Override
@@ -109,13 +114,16 @@ public class LoginFragment extends Fragment implements LoginFragmentContract {
         NavOptions navOptions = new NavOptions.Builder()
                 .setPopUpTo(R.id.loginFragment,true)
                 .build();
-        navController.navigate(R.id.homeFragment,null,navOptions);    }
+        navController.navigate(R.id.homeFragment,null,navOptions);
+        Log.i(TAG, "onLoginSuccess: "+userName);
+    }
 
     @Override
     public void onLoginFailure(String errorMsg) {
         btnLogin.setVisibility(VISIBLE);
         loginProgressBar.setVisibility(INVISIBLE);
-        Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
+        Log.e(TAG, "onLoginFailure: "+errorMsg);
+      //  Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
     }
 
     private void togglePasswordVisibility() {
