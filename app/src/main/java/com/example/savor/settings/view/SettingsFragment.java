@@ -1,4 +1,4 @@
-package com.example.savor.settings.presenter.view;
+package com.example.savor.settings.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -54,23 +54,35 @@ public class SettingsFragment extends Fragment implements SettingsFragmentContra
     }
 
     private void showDialog() {
+        View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.custom_dialog, null);
+
+        TextView dialogTitle = dialogView.findViewById(R.id.dialog_title);
+        TextView dialogMessage = dialogView.findViewById(R.id.dialog_message);
+        Button positiveButton = dialogView.findViewById(R.id.dialog_positive_button);
+        Button negativeButton = dialogView.findViewById(R.id.dialog_negative_button);
+
+        dialogTitle.setText(R.string.warning);
+        dialogMessage.setText(R.string.are_you_sure);
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Attention")
-                .setMessage("Are You Sure")
-                .setPositiveButton("yes", (dialog, i) -> {
-                    settingsPresenterImp.logOut();
-                    NavController navController = Navigation.findNavController(requireView());
-                    NavOptions navOptions= new NavOptions.Builder()
-                            .setPopUpTo(R.id.settingsFragment,true)
-                            .build();
-                    navController.navigate(R.id.loginFragment,null,navOptions);
-                    //Toast.makeText(requireContext(), "OK Logout", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                })
-                .setNegativeButton("No", (dialogInterface, i) -> {
-                    Toast.makeText(requireContext(), "Right", Toast.LENGTH_SHORT).show();
-                })
-                .setCancelable(true);
-        builder.create().show();
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+
+        positiveButton.setOnClickListener(v -> {
+            settingsPresenterImp.logOut();
+            NavController navController = Navigation.findNavController(requireView());
+            NavOptions navOptions= new NavOptions.Builder()
+                    .setPopUpTo(R.id.settingsFragment,true)
+                    .build();
+            navController.navigate(R.id.loginFragment,null,navOptions);
+            dialog.dismiss();
+        });
+
+        negativeButton.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        dialog.show();
     }
+
+
 }

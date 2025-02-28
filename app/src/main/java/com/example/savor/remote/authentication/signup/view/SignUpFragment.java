@@ -29,7 +29,6 @@ import com.example.savor.remote.authentication.signup.presenter.SignUpPresenterI
 
 public class SignUpFragment extends Fragment implements SignUpFragmentContract {
     SignUpPresenterImp signUpPresenterImp;
-
     EditText txtUseName;
     EditText txtPassword;
     Button btnSignUp;

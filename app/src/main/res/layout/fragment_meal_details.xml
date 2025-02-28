@@ -31,13 +31,25 @@
         <ImageView
             android:id="@+id/imageMealDetails"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="220dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottiImageMealDetails"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:visibility="visible"
+            android:scaleType="centerCrop"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/waiting"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
         <ImageView
             android:id="@+id/imgAddToFav"
             android:layout_width="30dp"

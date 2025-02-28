@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
@@ -72,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
                }
 
             }
-
             @Override
             public void onLost(@NonNull Network network) {
                 super.onLost(network);
@@ -88,9 +88,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-String userName =sharedPreferences.getString(MainActivity.USER_NAME,null);
 
     }
+
+
 
     @Override
     protected void onDestroy() {

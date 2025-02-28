@@ -1,11 +1,17 @@
 package com.example.savor.mealdetails.view;
 
+import static android.view.View.GONE;
+
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,11 +19,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.savor.R;
@@ -48,6 +56,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
     RecyclerView recyclerViewIngredient;
     String mealId; //from Saved Argus
     MealsItem mealItem; //from showMealDetails
+    LottieAnimationView lotti;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,6 +77,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
         txtCountry = view.findViewById(R.id.txtAreaMealDetails);
         txtInstructions = view.findViewById(R.id.txtInstructions);
         videoView = view.findViewById(R.id.videoViewMealDetails);
+        lotti = view.findViewById(R.id.lottiImageMealDetails);
         recyclerViewIngredient = view.findViewById(R.id.recyclerViewIngredientMealDetails);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false);
         recyclerViewIngredient.setLayoutManager(layoutManager);
@@ -89,8 +99,8 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
         txtInstructions.setText(mealsItem.getStrInstructions());
         Glide.with(requireContext()).load(mealsItem.getStrMealThumb())
                 .apply(new RequestOptions()
-                        .fitCenter()
-                        .placeholder(R.drawable.ic_app)
+                        .centerCrop()
+                        //.placeholder(R.drawable.ic_app)
                         .error(R.drawable.ic_app)).into(imgMeal);
         AdapterIngredientMealDetails adapterIngredientMealDetails = new AdapterIngredientMealDetails(requireContext(), ingredientList, measureList, this);
         recyclerViewIngredient.setAdapter(adapterIngredientMealDetails);
@@ -132,17 +142,81 @@ public class MealDetailsFragment extends Fragment implements MealDetailsFragment
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+        Calendar maxCalender = Calendar.getInstance();
+        maxCalender.add(Calendar.DAY_OF_MONTH , 7);
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 requireContext(),
                 (view, selectedYear, selectedMonth, selectedDay) -> {
-                    String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
-                    Log.i(TAG, "Selected Date: " + selectedDate);
-                    mealItem.setDate(selectedDate);
+                    Calendar selectedCalendar = Calendar.getInstance();
+                    selectedCalendar.set(selectedYear, selectedMonth, selectedDay);
+                    String dayOfWeek = getDayOfWeek(selectedCalendar.get(Calendar.DAY_OF_WEEK));
+                    Log.i(TAG, "showDatePicker: "+dayOfWeek);
+                    mealItem.setDate(dayOfWeek);
                     mealDetailsPresenterImp.addToPlan(mealItem);
-                }, year, month, day);//set today as default
+                }, year, month, day);
         datePickerDialog.show();
         DatePicker datePicker = datePickerDialog.getDatePicker();
         datePicker.setMinDate(calendar.getTimeInMillis());
+        datePicker.setMaxDate(maxCalender.getTimeInMillis());
+    }
+@Override
+    public void showDialog() {
+        View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.custom_dialog, null);
+
+        TextView dialogTitle = dialogView.findViewById(R.id.dialog_title);
+        TextView dialogMessage = dialogView.findViewById(R.id.dialog_message);
+        Button positiveButton = dialogView.findViewById(R.id.dialog_positive_button);
+        Button negativeButton = dialogView.findViewById(R.id.dialog_negative_button);
+
+        dialogTitle.setText(R.string.you_must_login_to_use_this_feature);
+        dialogMessage.setText(R.string.login);
+        positiveButton.setText(R.string.ok);
+        positiveButton.setBackgroundColor(getResources().getColor(R.color.primary_color,null));
+        negativeButton.setBackgroundColor(getResources().getColor(R.color.background_color,null));
+        negativeButton.setTextColor(getResources().getColor(R.color.black,null));
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+
+        positiveButton.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(requireView());
+            NavOptions navOptions= new NavOptions.Builder()
+                    .setPopUpTo(R.id.mealDetailsFragment,true)
+                    .build();
+            navController.navigate(R.id.loginFragment,null,navOptions);
+            dialog.dismiss();
+        });
+
+        negativeButton.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        dialog.show();
     }
 
+    @Override
+    public void hideLotti() {
+        lotti.setVisibility(GONE);
+    }
+
+    private String getDayOfWeek(int dayOfWeek) {
+        switch (dayOfWeek) {
+            case Calendar.SUNDAY:
+                return "Sunday";
+            case Calendar.MONDAY:
+                return "Monday";
+            case Calendar.TUESDAY:
+                return "Tuesday";
+            case Calendar.WEDNESDAY:
+                return "Wednesday";
+            case Calendar.THURSDAY:
+                return "Thursday";
+            case Calendar.FRIDAY:
+                return "Friday";
+            case Calendar.SATURDAY:
+                return "Saturday";
+            default:
+                return "Unknown";
+        }
+}
 }

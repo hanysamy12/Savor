@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,7 +27,6 @@ import java.util.List;
 public class AdapterSearchAreas extends RecyclerView.Adapter<AdapterSearchAreas.ViewHolder>{
 Context context;
 List<AreasItem> areas;
-SearchPresenterImp searchPresenterImp;
 SearchFragmentContract searchFragmentContract;
 OnClickListenerArea listener;
     public AdapterSearchAreas(Context context, List<AreasItem> areas , SearchFragmentContract searchFragmentContract,OnClickListenerArea listener) {
@@ -58,9 +59,10 @@ OnClickListenerArea listener;
                         .error(R.drawable.ic_app)).into(holder.imgArea);
         holder.imgArea.setOnClickListener(view -> {
             listener.onClickAreaListener(areas.get(position).getStrArea());
- /*           searchPresenterImp = new SearchPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(context)),searchFragmentContract);
-            searchPresenterImp.getFilteredMealsByCountry(areas.get(position).getStrArea());
-      */  });
+
+        });
+        Animation animation = AnimationUtils.loadAnimation(context,R.anim.anim_list);
+        holder.constraintLayout.setAnimation(animation);
     }
 
     @Override

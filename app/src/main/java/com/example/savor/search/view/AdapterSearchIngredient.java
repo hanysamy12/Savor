@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,6 +52,8 @@ OnClickListenerIngredient listener;
         holder.imgIngredient.setOnClickListener(view -> {
             listener.onClickIngListener(ingredient.get(position).getStrIngredient());
              });
+        Animation animation = AnimationUtils.loadAnimation(context,R.anim.anim_list);
+        holder.constraintLayout.setAnimation(animation);
     }
 
     @Override

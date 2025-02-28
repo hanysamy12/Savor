@@ -6,6 +6,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -61,10 +63,13 @@ public class AdapterFavorite extends RecyclerView.Adapter<AdapterFavorite.ViewHo
             holder.txtDate.setVisibility(GONE);
         }else{
         holder.txtDate.setText(mealsIteList.get(position).getDate());
+
         }
         holder.constraintLayout.setOnClickListener(view -> {
             listener.onMealClicked(mealsIteList.get(position).getIdMeal());
         });
+        Animation animation = AnimationUtils.loadAnimation(context,R.anim.anim_fav_plan);
+        holder.constraintLayout.setAnimation(animation);
     }
 
     @Override

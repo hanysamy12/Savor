@@ -109,12 +109,9 @@ public class LoginFragment extends Fragment implements LoginFragmentContract {
     public void onLoginSuccess(String userName) {
         btnLogin.setVisibility(VISIBLE);
         loginProgressBar.setVisibility(INVISIBLE);
-        Toast.makeText(requireContext(), userName.substring(0,5), Toast.LENGTH_SHORT).show();
-        NavController navController = Navigation.findNavController(requireView());
-        NavOptions navOptions = new NavOptions.Builder()
-                .setPopUpTo(R.id.loginFragment,true)
-                .build();
-        navController.navigate(R.id.homeFragment,null,navOptions);
+//        Toast.makeText(requireContext(), userName.substring(0,5), Toast.LENGTH_SHORT).show();
+        NavController navController = Navigation.findNavController(requireActivity(),R.id.fragmentContainerView);
+        navController.navigate(R.id.action_loginFragment_to_homeFragment);
         Log.i(TAG, "onLoginSuccess: "+userName);
     }
 

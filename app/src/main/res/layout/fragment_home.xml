@@ -26,6 +26,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottyImageHomeMeal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/waiting" />
 
             <ImageView
                 android:id="@+id/imageRandomMeal"

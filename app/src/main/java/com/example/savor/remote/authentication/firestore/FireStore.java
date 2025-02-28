@@ -24,8 +24,6 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FireStore {
-    public static final String FIRE_STORE_USER_NAME_COLLECTION = "users";
-    public static final String FIRE_STORE_MEAL_COLLECTION = "meal";
     private static final String TAG = "FireStore";
     MealsRepositoryImp mealsRepositoryImp;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -43,8 +41,7 @@ public class FireStore {
     public void uploadData() {
         String userEmail = sharedPreferences.getString(MainActivity.USER_NAME, null);
         if (userEmail != null) {
-
-            }
+            Log.i(TAG, "uploadData: "+userEmail);
         Disposable subscribe = getStoredMeals()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -52,7 +49,7 @@ public class FireStore {
                         if (!meals.isEmpty()) {
                             Map<String, Object> storedMeals = new HashMap<>();
                             storedMeals.put("meals", meals);
-                            //  Log.i(TAG, "Stored Meal: " + meals);
+                              Log.i(TAG, "Stored Meal: " + meals);
                             db.collection(userEmail)
                                     .document("meals")
                                     .set(storedMeals)
@@ -78,13 +75,12 @@ public class FireStore {
                         Log.i(TAG, "Stored Meal: error " + throwable);
                     });
 
-
+        }
 
     }
 
 
     public void getData(String userEmail) {
-        //String userEmail = sharedPreferences.getString(MainActivity.USER_NAME, null);
         if (userEmail != null) {
             DocumentReference docRef = db.collection(userEmail).document("meals");
             docRef.get()
@@ -138,7 +134,7 @@ public class FireStore {
         return mealsRepositoryImp.getAllMeals()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(mealsItems -> mealsItems.stream()//convert list of meals to stream to
+                .map(mealsItems -> mealsItems.stream()
                         .map(mealsItem -> { // function
                             Map<String, Object> meal = new HashMap<>();
                             meal.put("idmeal", mealsItem.getIdMeal());

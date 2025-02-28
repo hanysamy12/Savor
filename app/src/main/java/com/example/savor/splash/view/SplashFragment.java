@@ -27,7 +27,6 @@ public class SplashFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-
         return inflater.inflate(R.layout.fragment_splash, container, false);
     }
 
@@ -37,26 +36,23 @@ public class SplashFragment extends Fragment {
         sharedPreferences = requireContext().getSharedPreferences(MainActivity.PRES_NAME, Context.MODE_PRIVATE);
         String userName = sharedPreferences.getString(MainActivity.USER_NAME, null);
         if(!MainActivity.isSplashed){
-        new Handler().postDelayed(() -> {
-            NavController navController = Navigation.findNavController(requireView());
+            MainActivity.isSplashed=true;
+
+            new Handler().postDelayed(() -> {
+            NavController navController = Navigation.findNavController(requireActivity(),R.id.fragmentContainerView);
 
             if (userName != null) {
-                NavOptions navOptions = new NavOptions.Builder()
-                        .setPopUpTo(R.id.splashFragment, true)
-                        .build();
-                navController.navigate(R.id.homeFragment, null,navOptions);
+
+                navController.navigate(R.id.action_splashFragment_to_homeFragment);
             } else {
-                NavOptions navOptions = new NavOptions.Builder()
-                        .setPopUpTo(R.id.splashFragment, true)
-                        .build();
-                navController.navigate(R.id.loginFragment, null, navOptions);
+
+                navController.navigate(R.id.action_splashFragment_to_loginFragment);
             }
         }, 3000);}
-        }
+       }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        MainActivity.isSplashed=true;
     }
 }

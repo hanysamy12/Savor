@@ -22,4 +22,9 @@ public class AuthenticationRepoImp implements AuthenticationRepo {
     public void googleLogin(Activity activity, AuthenticationCallBack authenticationCallBack) {
         authentication.googleSignIn(activity,authenticationCallBack);
     }
+
+    @Override
+    public void logOut() {
+        authentication.signOut();
+    }
 }

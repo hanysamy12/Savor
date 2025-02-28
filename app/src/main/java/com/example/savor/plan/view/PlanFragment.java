@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -87,18 +89,31 @@ public class PlanFragment extends Fragment implements PlanFragmentContract, OnCl
     }
 
     private void showDialog(String id) {
+        View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.custom_dialog, null);
+
+        TextView dialogTitle = dialogView.findViewById(R.id.dialog_title);
+        TextView dialogMessage = dialogView.findViewById(R.id.dialog_message);
+        Button positiveButton = dialogView.findViewById(R.id.dialog_positive_button);
+        Button negativeButton = dialogView.findViewById(R.id.dialog_negative_button);
+
+        dialogTitle.setText(R.string.warning);
+        dialogMessage.setText(R.string.are_you_sure);
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Attention")
-                .setMessage("Are You Sure")
-                .setPositiveButton("yes", (dialog, i) -> {
-                    planFragmentPresenter.deleteFromPlan(id);
-                    dialog.dismiss();
-                })
-                .setNegativeButton("No", (dialogInterface, i) -> {
-                    Toast.makeText(requireContext(), "Right", Toast.LENGTH_SHORT).show();
-                })
-                .setCancelable(true);
-        builder.create().show();
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+
+        positiveButton.setOnClickListener(v -> {
+            planFragmentPresenter.deleteFromPlan(id);
+            dialog.dismiss();
+        });
+
+        negativeButton.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        dialog.show();
     }
+
+
 
 }

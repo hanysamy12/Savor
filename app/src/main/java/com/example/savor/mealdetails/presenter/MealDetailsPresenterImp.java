@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MealDetailsPresenterImp implements MealDetailsPresenter {
@@ -37,7 +38,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
     public void getMealById(Integer mealId) {
         boolean isOnline = sharedPreferences.getBoolean(MainActivity.IS_ONLINE, false);
         if (!isOnline) {
-            mealsRepositoryImp.getStoredMealById(String.valueOf(mealId))
+            Disposable subscribe = mealsRepositoryImp.getStoredMealById(String.valueOf(mealId))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(mealsItemResponse -> {
@@ -60,7 +61,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
                     });
         }
         else {
-            mealsRepositoryImp.getMealById(mealId)
+            Disposable subscribe = mealsRepositoryImp.getMealById(mealId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(mealsItemResponse -> {
@@ -76,7 +77,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
                                 measureList.add(measure);
                             }
                         }
-
+                        mealDetailsFragmentContract.hideLotti();
                         mealDetailsFragmentContract.showMealDetails(mealsItemResponse.getMeals().get(0), ingredienList, measureList);
                     }, throwable -> {
                         mealDetailsFragmentContract.showError(throwable.getMessage());
@@ -87,9 +88,9 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
     @Override
     public void addToFavorite(MealsItem mealsItem) {
         if (userName == null) {
-            mealDetailsFragmentContract.showError("Login To add To Favorite");
+            mealDetailsFragmentContract.showDialog();
         } else {
-            mealsRepositoryImp.addFavoriteMeal(mealsItem)
+            Disposable subscribe = mealsRepositoryImp.addFavoriteMeal(mealsItem)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
@@ -107,15 +108,15 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
     public void addToPlan(MealsItem mealsItem) {
 
         if (userName==null) {
-            mealDetailsFragmentContract.showError("Login To add To Plan");
+            mealDetailsFragmentContract.showDialog();
         } else {
-            mealsRepositoryImp.addPlanMeal(mealsItem)
+            Disposable subscribe = mealsRepositoryImp.addPlanMeal(mealsItem)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(() -> {
                         mealDetailsFragmentContract.showSuccessMessage("Added");
                     }, throwable -> {
-                       // mealDetailsFragmentContract.showError("Not Added");
+                        // mealDetailsFragmentContract.showError("Not Added");
                     });
         }
     }

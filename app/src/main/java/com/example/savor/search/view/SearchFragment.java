@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 
 import com.example.savor.R;
@@ -39,6 +41,8 @@ import com.example.savor.search.presenter.SearchPresenter;
 import com.example.savor.search.presenter.SearchPresenterImp;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
@@ -74,6 +78,8 @@ public class SearchFragment extends Fragment implements SearchFragmentContract
         recyclerView = view.findViewById(R.id.searchRecyclerView);
         layoutManager = new GridLayoutManager(requireContext(), 2, VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
+        /*Animation animation = AnimationUtils.loadAnimation(requireContext(),R.anim.anim_list);
+        recyclerView.setAnimation(animation);*/
         searchPresenter = new SearchPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance()
                 , MealsLocalDataSource.getInstance(requireContext())), this);
         searchPresenter.getAllCategories();
@@ -136,8 +142,8 @@ public class SearchFragment extends Fragment implements SearchFragmentContract
                 String query = charSequence.toString().toLowerCase().trim();
                 Observable.fromIterable(filteredResponse.getMealsFilteredItems())
                         .filter(meal -> meal.getStrMeal().toLowerCase().contains(query))
-                        .toList() //convert to list
-                        .subscribeOn(Schedulers.io()) //filter in background
+                        .toList()
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(filteredMeals -> {
                             adapterSearchMeals.setSearchMealChanges(filteredMeals);

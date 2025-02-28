@@ -5,6 +5,7 @@ import static android.view.View.VISIBLE;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,12 +49,12 @@ public class HomeFragment extends Fragment implements HomeScreenContract, OnClic
     Boolean isOnline;
     CardView cardViewHome;
     LottieAnimationView lotti;
+    LottieAnimationView lottiMeal;
     private static final String TAG = "HomeFragment";
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        Log.i(TAG, "onCreateView: ");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.i(TAG, "onCreateView: Home");
         isOnline = HomeFragmentArgs.fromBundle(getArguments()).getIsOnline();
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -72,29 +73,45 @@ public class HomeFragment extends Fragment implements HomeScreenContract, OnClic
         recyclerViewHome = view.findViewById(R.id.recyclerViewHome);
         cardViewHome = view.findViewById(R.id.cardViewHome);
         lotti = view.findViewById(R.id.lottyImage);
+        lottiMeal = view.findViewById(R.id.lottyImageHomeMeal);
+        lottiMeal.setVisibility(VISIBLE);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerViewHome.setLayoutManager(layoutManager);
-        homeScreenPresenterImp = new HomeScreenPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance(), MealsLocalDataSource.getInstance(requireContext()))
-                , this, requireContext());
+        homeScreenPresenterImp = new HomeScreenPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance()
+                , MealsLocalDataSource.getInstance(requireContext())), this, requireContext());
 
         homeScreenPresenterImp.handelOnConnectionChanges(isOnline);
-        Animation cardAnim = AnimationUtils.loadAnimation(requireContext(),R.anim.anim_home_card);
+        Animation cardAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.anim_home_card);
         cardViewHome.startAnimation(cardAnim);
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener( new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey( View v, int keyCode, KeyEvent event )
+            {
+                if( keyCode == KeyEvent.KEYCODE_BACK )
+                {
+                    requireActivity().finish();
+                    return true;
+                }
+                return false;
+            }
+        } );
     }
 
     @Override
     public void showRandomMeal(MealsItemResponse mealsItemResponse) {
         txtRandomMeal.setText(mealsItemResponse.getMeals().get(0).getStrMeal());
+        lottiMeal.setVisibility(GONE);
         Log.i(TAG, "showRandomMeal: " + mealsItemResponse.getMeals().get(0).getStrMeal());
-        Glide.with(requireContext()).load(mealsItemResponse.getMeals().get(0).getStrMealThumb())
-                .apply(new RequestOptions()
-                        .fitCenter()
-                        .placeholder(R.drawable.ic_launcher_background)
-                        .error(R.drawable.ic_launcher_background)).into(imgRandomMeal);
+        Glide.with(requireContext()).load(mealsItemResponse.getMeals().get(0).getStrMealThumb()).apply(new RequestOptions().fitCenter()
+               // .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_background)).into(imgRandomMeal);
         imgRandomMeal.setOnClickListener(view -> {
-            HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action =
-                    HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealsItemResponse.getMeals().get(0).getIdMeal());
+            HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealsItemResponse.getMeals().get(0).getIdMeal());
             Navigation.findNavController(view).navigate(action);
         });
     }
@@ -123,8 +140,7 @@ public class HomeFragment extends Fragment implements HomeScreenContract, OnClic
 
     @Override
     public void onClickListener(String mealId) {
-        HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action =
-                HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealId);
+        HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealId);
         Navigation.findNavController(requireView()).navigate(action);
     }
 

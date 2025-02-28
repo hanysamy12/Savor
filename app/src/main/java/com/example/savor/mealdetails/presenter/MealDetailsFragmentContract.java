@@ -8,4 +8,6 @@ public interface MealDetailsFragmentContract {
     void showMealDetails(MealsItem mealsItem , List<String> ingredientList , List<String> measureList);
     void showError(String errorMsg);
     void showSuccessMessage(String succcesMsg);
+    void showDialog();
+    void hideLotti();
 }

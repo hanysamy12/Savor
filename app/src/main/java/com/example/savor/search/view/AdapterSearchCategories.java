@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,6 +54,8 @@ public class AdapterSearchCategories extends RecyclerView.Adapter<AdapterSearchC
         holder.imgCategory.setOnClickListener(view -> {
             listener.onClickCatListener(categories.get(position).getStrCategory());
         });
+        Animation animation = AnimationUtils.loadAnimation(context,R.anim.anim_list);
+        holder.constraintLayout.setAnimation(animation);
     }
 
     @Override

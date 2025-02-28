@@ -1,5 +1,6 @@
 package com.example.savor.remote.presenter;
 
+import static android.provider.Settings.System.getString;
 import static com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL;
 
 import android.app.Activity;
@@ -15,6 +16,7 @@ import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.exceptions.GetCredentialException;
 
+import com.example.savor.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
@@ -47,39 +49,27 @@ public class Authentication {
     public void signUp(String email, String password, AuthenticationCallBack authenticationCallBack) {
 
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnSuccessListener(activity, new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-                        authenticationCallBack.onSuccess(authResult.getUser().getEmail());
+                .addOnSuccessListener(activity, authResult -> authenticationCallBack.onSuccess(authResult.getUser().getEmail())).addOnFailureListener(activity, e -> {
+                    String message = "Tray Again Later";
+                    if (e instanceof FirebaseAuthUserCollisionException) {
+                        message = "User existed";
                     }
-                }).addOnFailureListener(activity, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        String message = "Tray Again Later";
-                        //user already registered
-                        if (e instanceof FirebaseAuthUserCollisionException) {
-                            message = "User existed";
-                        }
-                        // Handle network connection issues (e.g., no internet)
-                        else if (e instanceof IOException) {
-                            message = "No Internet";
-                        }
-                        authenticationCallBack.onFailure(message);
+                    else if (e instanceof IOException) {
+                        message = "No Internet";
+                    }
+                    authenticationCallBack.onFailure(message);
 
-                    }
                 });
 
     }
 //project-318047228197
     public void logIn(String userName, String password, AuthenticationCallBack authenticationCallBack) {
         Log.i(TAG, "logIn: " + userName + " " + password);
-        //String userId ="1";
         mAuth.signInWithEmailAndPassword(userName, password)
                 .addOnSuccessListener(activity, new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         authenticationCallBack.onSuccess(authResult.getUser().getEmail());
-                        //Snackbar.make(view,"Welcome "+authResult.getUser().getEmail(),Snackbar.ANIMATION_MODE_FADE).show();
 
                     }
                 })
@@ -90,7 +80,6 @@ public class Authentication {
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             message = "Wrong Email Or Password";
                         }
-                        // Handle network connection issues (e.g., no internet)
                         else if (e instanceof IOException) {
                             message = "No Internet";
                         }
@@ -102,10 +91,11 @@ public class Authentication {
     }
 
     public void googleSignIn(Activity activity,AuthenticationCallBack authenticationCallBack){
+        Log.i(TAG, "googleSignIn: ");
         GetGoogleIdOption googleIdOption = new GetGoogleIdOption.Builder()
-                .setFilterByAuthorizedAccounts(true)
-               .setServerClientId("318047228197-l1egji3bv7ebm79f4kavk20sks2u4ap6.apps.googleusercontent.com")
-               //.setServerClientId(getString(R.string.default_web_client_id))
+                .setFilterByAuthorizedAccounts(false)
+              // .setServerClientId("318047228197-l1egji3bv7ebm79f4kavk20sks2u4ap6.apps.googleusercontent.com")
+               .setServerClientId(activity.getString(R.string.default_web_client_id))
                 .build();
 
         GetCredentialRequest request = new GetCredentialRequest.Builder()
@@ -117,7 +107,11 @@ public class Authentication {
                 , new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
                     @Override
                     public void onResult(GetCredentialResponse getCredentialResponse) {
-                        handleSignIn(getCredentialResponse.getCredential(),activity,authenticationCallBack);
+                        Log.i(TAG, "onResult: "+Thread.currentThread().getName());
+
+                        activity.runOnUiThread(() -> {
+                            handleSignIn(getCredentialResponse.getCredential(),activity,authenticationCallBack);
+                        });
                     }
 
                     @Override
@@ -138,7 +132,7 @@ public class Authentication {
                 Bundle credentialData = customCredential.getData();
                 GoogleIdTokenCredential googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credentialData);
                 firebaseAuthWithGoogle(googleIdTokenCredential.getIdToken(),activity,authenticationCallBack);
-                authenticationCallBack.onSuccess("signInWithCredential:success");
+               // authenticationCallBack.onSuccess("signInWithCredential:success");
             }else {
                 authenticationCallBack.onFailure("signInWithCredential:failure");
             }
@@ -156,8 +150,10 @@ public class Authentication {
                         Log.i(TAG, "firebaseAuthWithGoogle: success ");
                         FirebaseUser user =mAuth.getCurrentUser();
                         if(user!=null) {
+                            Log.i(TAG, "firebaseAuthWithGoogle: Google UserNull");
                             authenticationCallBack.onSuccess(user.getEmail());
                         }else {
+                            Log.i(TAG, "firebaseAuthWithGoogle: Google UserNotNul");
                             authenticationCallBack.onFailure("User Null");
                         }
                     }else {

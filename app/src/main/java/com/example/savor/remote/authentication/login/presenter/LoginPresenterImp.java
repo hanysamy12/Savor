@@ -3,6 +3,7 @@ package com.example.savor.remote.authentication.login.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.savor.MainActivity;
 import com.example.savor.remote.authentication.firestore.FireStore;
@@ -10,6 +11,7 @@ import com.example.savor.remote.presenter.AuthenticationCallBack;
 import com.example.savor.remote.presenter.AuthenticationRepo;
 
 public class LoginPresenterImp implements AuthenticationCallBack, LoginPresenter {
+    private static final String TAG = "LoginPresenterImp";
     AuthenticationRepo authenticationRepo;
     LoginFragmentContract loginFragmentContract;
     SharedPreferences sharedPreferences;
@@ -39,7 +41,8 @@ public class LoginPresenterImp implements AuthenticationCallBack, LoginPresenter
         sharedPreferences = context.getSharedPreferences(MainActivity.PRES_NAME , Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(MainActivity.USER_NAME,email);
-        editor.apply(); //async
+        Log.i(TAG, "LOgin Presenter onSuccess: "+email);
+        editor.apply();
         loginFragmentContract.onLoginSuccess(email);
         fireStore.getData(email);
     }
