@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,22 +16,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.savor.R;
-import com.example.savor.remote.model.MealsRemoteDataSource;
-import com.example.savor.remote.model.MealsRepositoryImp;
-import com.example.savor.remote.model.pojo.IngredientItem;
+import com.example.savor.model.pojo.IngredientItem;
+import com.example.savor.search.presenter.OnClickListenerIngredient;
 import com.example.savor.search.presenter.SearchFragmentContract;
-import com.example.savor.search.presenter.SearchPresenterImp;
 
 import java.util.List;
 
 public class AdapterSearchIngredient extends RecyclerView.Adapter<AdapterSearchIngredient.ViewHolder>{
 Context context;
 List<IngredientItem> ingredient;
-SearchPresenterImp searchPresenterImp;
 SearchFragmentContract searchFragmentContract;
-    public AdapterSearchIngredient(Context context, List<IngredientItem> ingredient,SearchFragmentContract searchFragmentContract) {
+OnClickListenerIngredient listener;
+    public AdapterSearchIngredient(Context context, List<IngredientItem> ingredient,SearchFragmentContract searchFragmentContract,OnClickListenerIngredient listener) {
         this.context = context;
         this.ingredient = ingredient;
+        this.listener = listener;
         this.searchFragmentContract = searchFragmentContract;
     }
 
@@ -49,9 +50,10 @@ SearchFragmentContract searchFragmentContract;
                         .placeholder(R.drawable.ic_app)
                         .error(R.drawable.ic_app)).into(holder.imgIngredient);
         holder.imgIngredient.setOnClickListener(view -> {
-            searchPresenterImp = new SearchPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance()), searchFragmentContract);
-            searchPresenterImp.getFilteredMealsByIngredient(ingredient.get(position).getStrIngredient());
-        });
+            listener.onClickIngListener(ingredient.get(position).getStrIngredient());
+             });
+        Animation animation = AnimationUtils.loadAnimation(context,R.anim.anim_list);
+        holder.constraintLayout.setAnimation(animation);
     }
 
     @Override

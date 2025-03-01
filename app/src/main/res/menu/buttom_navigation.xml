@@ -19,5 +19,6 @@
         android:id="@+id/planFragment"/>
     <item
         android:title=""
-        android:icon="@drawable/ic_log_out"/>
+        android:icon="@drawable/ic_settings"
+        android:id="@+id/settingsFragment"/>
 </menu>

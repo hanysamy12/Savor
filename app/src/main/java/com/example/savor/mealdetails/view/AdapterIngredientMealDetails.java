@@ -44,8 +44,8 @@ public class AdapterIngredientMealDetails extends RecyclerView.Adapter<AdapterIn
         Glide.with(context).load("https://themealdb.com/images/ingredients/"+ingredient.get(position)+".png")
                 .apply(new RequestOptions()
                         .fitCenter()
-                        .placeholder(R.drawable.ic_app)
-                        .error(R.drawable.ic_app)).into(holder.imgIngredient);
+                       // .placeholder(R.drawable.ic_search)
+                        .error(R.drawable.ic_launcher_background)).into(holder.imgIngredient);
     }
 
     @Override

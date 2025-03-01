@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,30 +16,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.savor.R;
-import com.example.savor.remote.model.MealsRemoteDataSource;
-import com.example.savor.remote.model.MealsRepositoryImp;
-import com.example.savor.remote.model.pojo.CategoriesItem;
+import com.example.savor.model.pojo.CategoriesItem;
+import com.example.savor.search.presenter.OnClickListenerCategory;
 import com.example.savor.search.presenter.SearchFragmentContract;
-import com.example.savor.search.presenter.SearchPresenterImp;
 
 import java.util.List;
 
-public class AdapterSearchCategories extends RecyclerView.Adapter<AdapterSearchCategories.ViewHolder>{
-Context context;
-List<CategoriesItem> categories;
-SearchPresenterImp searchPresenterImp;
-SearchFragmentContract searchFragmentContract;
-    public AdapterSearchCategories(Context context, List<CategoriesItem> categories,SearchFragmentContract searchFragmentContract) {
+public class AdapterSearchCategories extends RecyclerView.Adapter<AdapterSearchCategories.ViewHolder> {
+    Context context;
+    List<CategoriesItem> categories;
+    SearchFragmentContract searchFragmentContract;
+    OnClickListenerCategory listener;
+
+    public AdapterSearchCategories(Context context, List<CategoriesItem> categories, SearchFragmentContract searchFragmentContract, OnClickListenerCategory listener) {
         this.context = context;
         this.categories = categories;
         this.searchFragmentContract = searchFragmentContract;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup recyclerView, int viewType) {
-        LayoutInflater inflater= LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.item_list_search,recyclerView,false);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.item_list_search, recyclerView, false);
         return new ViewHolder(view);
     }
 
@@ -50,25 +52,28 @@ SearchFragmentContract searchFragmentContract;
                         .placeholder(R.drawable.ic_app)
                         .error(R.drawable.ic_app)).into(holder.imgCategory);
         holder.imgCategory.setOnClickListener(view -> {
-            searchPresenterImp = new SearchPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance()),searchFragmentContract);
-            searchPresenterImp.getFilteredMealsByCategory(categories.get(position).getStrCategory());
+            listener.onClickCatListener(categories.get(position).getStrCategory());
         });
+        Animation animation = AnimationUtils.loadAnimation(context,R.anim.anim_list);
+        holder.constraintLayout.setAnimation(animation);
     }
 
     @Override
     public int getItemCount() {
         return categories.size();
     }
-    class ViewHolder extends RecyclerView.ViewHolder{
+
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtCategoryName;
         ImageView imgCategory;
         ConstraintLayout constraintLayout;
-         public ViewHolder(@NonNull View itemView) {
-             super(itemView);
-             txtCategoryName = itemView.findViewById(R.id.txtItemListSearch);
-             imgCategory = itemView.findViewById(R.id.imageItemListSearch);
-             constraintLayout = itemView.findViewById(R.id.listItemSearch);
 
-         }
-     }
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            txtCategoryName = itemView.findViewById(R.id.txtItemListSearch);
+            imgCategory = itemView.findViewById(R.id.imageItemListSearch);
+            constraintLayout = itemView.findViewById(R.id.listItemSearch);
+
+        }
+    }
 }

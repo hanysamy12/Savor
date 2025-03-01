@@ -9,21 +9,31 @@
     tools:context=".homepage.view.HomeFragment">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/cardViewHome"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="30dp"
+        android:gravity="bottom"
         app:cardCornerRadius="30dp"
         app:layout_constraintBottom_toTopOf="@+id/recyclerViewHome"
         app:layout_constraintEnd_toStartOf="@id/guideline4"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@id/guideline3"
-        app:layout_constraintTop_toTopOf="parent"
-        android:gravity="bottom"
-        >
+        app:layout_constraintTop_toBottomOf="@id/txtMealOftoDAy"
+        android:visibility="invisible">
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"            >
+            android:layout_height="match_parent">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottyImageHomeMeal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/waiting" />
 
             <ImageView
                 android:id="@+id/imageRandomMeal"
@@ -37,14 +47,14 @@
                 android:id="@+id/txtRandomMeal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textStyle="italic"
-                android:textColor="@color/secondary_color"
-                android:background="@color/card_text_background"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
+                android:background="@color/card_text_background"
+                android:gravity="center"
                 android:paddingVertical="10dp"
-                android:gravity="center"/>
+                android:textColor="@color/secondary_color"
+                android:textSize="20sp"
+                android:textStyle="italic" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
@@ -73,17 +83,53 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewHome"
         tools:listitem="@layout/item_list_home" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/txtMealOftoDAy"
+        style="@style/TextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="@string/meal_of_today"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtMealsForYou"
         style="@style/TextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:text="@string/egyptian_meals"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+        app:layout_constraintTop_toBottomOf="@+id/cardViewHome" />
 
-   </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottyImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/txtNoInterNet"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/splash" />
+
+    <TextView
+        android:id="@+id/txtNoInterNet"
+        style="@style/TextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="176dp"
+        android:text="@string/connecton_lost"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline4"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/guideline3" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

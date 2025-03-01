@@ -7,5 +7,6 @@ public interface SearchPresenter {
     void getFilteredMealsByCategory(String categoryName);
     void getFilteredMealsByIngredient(String IngredientName);
     void getFilteredMealsByCountry(String countryName);
+
 }
 

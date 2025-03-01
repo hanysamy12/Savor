@@ -1,61 +1,100 @@
 package com.example.savor;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Network;
 import android.os.Bundle;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.savor.remote.model.MealsRemoteDataSource;
-import com.example.savor.remote.model.MealsRepositoryImp;
+import com.example.savor.remote.authentication.firestore.FireStore;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-//userName honi76034@gmail.com
+//userName honysamy@gmail.com
 //password Hani@123
+
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivityLog";
     NavHostFragment navHostFragment;
     BottomNavigationView bottomNavigationView;
     NavController navController;
-    private MealsRemoteDataSource mealsRemoteDataSource;
-    private MealsRepositoryImp mealsRepositoryImp;
-    private static final String TAG = "MainActivity";
-
+    SharedPreferences sharedPreferences;
+    public static final String USER_NAME = "userName";
+    public static final String STORED_DATE = "dateOfTheCurrentDay";
+    public static final String PRES_NAME = "PREF";
+    public static final String TODAY_MEAL_ID ="mealId";
+    public static final String IS_ONLINE = "isOnline";
+    public static boolean isSplashed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // EdgeToEdge.enable(this);
+        // EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        MealsRemoteDataSource.getInstance();
+        isSplashed = false;
         navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragmentContainerView);
         navController = navHostFragment.getNavController();
         bottomNavigationView = findViewById(R.id.bottomMenue);
-        NavigationUI.setupWithNavController(bottomNavigationView,navController);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        sharedPreferences=getSharedPreferences(MainActivity.PRES_NAME, Context.MODE_PRIVATE);
+        ConnectivityManager connectivityManager = getSystemService(ConnectivityManager.class);
+        Network network = connectivityManager.getActiveNetwork(); //on Start
+        if(network==null)
+        {
+            Log.i(TAG, "Network Status: Offline"+isSplashed);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(MainActivity.IS_ONLINE,false);
+            editor.apply();
 
-
-/*        mealsRemoteDataSource.getRandomMeal();
-        mealsRemoteDataSource.getAllDetailedMeals("a");
-        mealsRemoteDataSource.getMealById(52924);
-        mealsRemoteDataSource.getAllCategories();
-        mealsRemoteDataSource.getAllAreas();
-        mealsRemoteDataSource.getAllIngredient();*/
-
-       // mealsRepositoryImp = new MealsRepositoryImp(MealsRemoteDataSource.getInstance());
-       /* mealsRepositoryImp.getRandomMeal(new MealsCallBack<MealsItemResponse>() {
+        }
+        //live status
+        connectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback(){
             @Override
-            public void onSuccess(MealsItemResponse response) {
-                Log.i(TAG, "onSuccess: "+response.getMeals().get(0).getStrMeal());
-                Toast.makeText(MainActivity.this, "Congrat", Toast.LENGTH_SHORT).show();
+            public void onAvailable(@NonNull Network network) {
+                super.onAvailable(network);
+                Log.i(TAG, "onAvailable: "+isSplashed);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(MainActivity.IS_ONLINE,true);
+                editor.apply();
+                Bundle bundle =new Bundle();
+                bundle.putBoolean("isOnline",true);
+                if(isSplashed ) {
+
+                    runOnUiThread(() -> navController.navigate(R.id.homeFragment, bundle));
+               }
+
             }
-
             @Override
-            public void onFailure(String errorMsg) {
-                Log.i(TAG, "onFailure: main -"+errorMsg);
+            public void onLost(@NonNull Network network) {
+                super.onLost(network);
+                Log.i(TAG, "onLost: "+isSplashed);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(MainActivity.IS_ONLINE,false);
+                editor.apply();
+                Bundle bundle =new Bundle();
+                bundle.putBoolean("isOnline",false);
+                if(isSplashed) {
+
+                      runOnUiThread(()->navController.navigate(R.id.homeFragment,bundle));
+                }
             }
         });
-*/    }
 
+    }
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
 
 }

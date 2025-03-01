@@ -3,38 +3,56 @@ package com.example.savor.search.view;
 import static androidx.recyclerview.widget.LinearLayoutManager.VERTICAL;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.savor.R;
-import com.example.savor.remote.model.MealsRemoteDataSource;
-import com.example.savor.remote.model.MealsRepositoryImp;
-import com.example.savor.remote.model.pojo.AreaResponse;
-import com.example.savor.remote.model.pojo.CategoriesResponse;
-import com.example.savor.remote.model.pojo.FilteredResponse;
-import com.example.savor.remote.model.pojo.IngredientResponse;
+import com.example.savor.database.MealsLocalDataSource;
+import com.example.savor.model.MealsRemoteDataSource;
+import com.example.savor.model.MealsRepositoryImp;
+import com.example.savor.model.pojo.AreaResponse;
+import com.example.savor.model.pojo.CategoriesResponse;
+import com.example.savor.model.pojo.FilteredResponse;
+import com.example.savor.model.pojo.IngredientResponse;
+import com.example.savor.model.pojo.MealsFilteredItem;
+import com.example.savor.model.pojo.MealsItem;
+import com.example.savor.model.pojo.MealsItemResponse;
+import com.example.savor.search.presenter.OnClickListenerArea;
+import com.example.savor.search.presenter.OnClickListenerCategory;
+import com.example.savor.search.presenter.OnClickListenerIngredient;
+import com.example.savor.search.presenter.OnClickMealListener;
 import com.example.savor.search.presenter.SearchFragmentContract;
 import com.example.savor.search.presenter.SearchPresenter;
 import com.example.savor.search.presenter.SearchPresenterImp;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public class SearchFragment extends Fragment implements SearchFragmentContract {
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
+
+public class SearchFragment extends Fragment implements SearchFragmentContract
+        , OnClickMealListener, OnClickListenerCategory, OnClickListenerIngredient, OnClickListenerArea {
     ChipGroup chipGroup;
     EditText txtSearch;
     SearchPresenter searchPresenter;
-    //LinearLayoutManager layoutManager;
     GridLayoutManager layoutManager;
     RecyclerView recyclerView;
     AdapterSearchCategories adapterCategories;
@@ -59,7 +77,10 @@ public class SearchFragment extends Fragment implements SearchFragmentContract {
         recyclerView = view.findViewById(R.id.searchRecyclerView);
         layoutManager = new GridLayoutManager(requireContext(), 2, VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        searchPresenter = new SearchPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance()), this);
+        /*Animation animation = AnimationUtils.loadAnimation(requireContext(),R.anim.anim_list);
+        recyclerView.setAnimation(animation);*/
+        searchPresenter = new SearchPresenterImp(new MealsRepositoryImp(MealsRemoteDataSource.getInstance()
+                , MealsLocalDataSource.getInstance(requireContext())), this);
         searchPresenter.getAllCategories();
         chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (!checkedIds.isEmpty()) {
@@ -85,21 +106,24 @@ public class SearchFragment extends Fragment implements SearchFragmentContract {
 
     @Override
     public void showAllCategories(CategoriesResponse categoriesResponse) {
-        adapterCategories = new AdapterSearchCategories(requireContext(), categoriesResponse.getCategories(),this);
+        adapterCategories = new AdapterSearchCategories(requireContext()
+                , categoriesResponse.getCategories(), this, this);
+
         recyclerView.setAdapter(adapterCategories);
         Log.i(TAG, "showAllCategories: " + categoriesResponse.getCategories().get(0).getStrCategory());
     }
 
     @Override
     public void showAllIngredient(IngredientResponse ingredientResponse) {
-        adapterIngredient = new AdapterSearchIngredient(requireContext(), ingredientResponse.getIngredient(),this);
+        adapterIngredient = new AdapterSearchIngredient(requireContext(), ingredientResponse.getIngredient(), this, this);
+
         recyclerView.setAdapter(adapterIngredient);
         Log.i(TAG, "showAllIngredient: " + ingredientResponse.getIngredient().get(0).getStrIngredient());
     }
 
     @Override
     public void showAllAreas(AreaResponse areaResponse) {
-        adapterSearchAreas = new AdapterSearchAreas(requireContext(), areaResponse.getAreas(),this);
+        adapterSearchAreas = new AdapterSearchAreas(requireContext(), areaResponse.getAreas(), this, this);
         recyclerView.setAdapter(adapterSearchAreas);
         Log.i(TAG, "showAllAreas: " + areaResponse.getAreas().get(0).getStrArea());
     }
@@ -107,13 +131,71 @@ public class SearchFragment extends Fragment implements SearchFragmentContract {
     @Override
     public void showFilteredMeals(FilteredResponse filteredResponse) {
         layoutManager.setSpanCount(1);
-        adapterSearchMeals = new AdapterSearchMeals(requireContext(), filteredResponse.getMealsFilteredItems());
+        adapterSearchMeals = new AdapterSearchMeals(requireContext(), filteredResponse.getMealsFilteredItems(), this);
+        Observable.create(emitter -> {
+                    txtSearch.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                            emitter.onNext(charSequence);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+                        }
+                    });
+                }).debounce(1, TimeUnit.SECONDS)
+                .map(charSqence -> charSqence.toString().toLowerCase().trim())
+                .distinctUntilChanged()
+                .map(s -> {
+                    List<MealsFilteredItem> filteredMeals = new ArrayList<>();
+                    for (MealsFilteredItem meal : filteredResponse.getMealsFilteredItems())
+                    {
+                        if(meal.getStrMeal().toLowerCase().contains(s))
+                        {
+                            filteredMeals.add(meal);
+                        }
+                    }
+                    return filteredMeals;
+                }).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(mealsFilteredItems -> {
+                                    adapterSearchMeals.setSearchMealChanges(mealsFilteredItems);
+                                },throwable -> {
+                                    Log.i(TAG, "showFilteredMeals: Error "+throwable);
+                                });
         recyclerView.setAdapter(adapterSearchMeals);
     }
+
+
 
 
     @Override
     public void showError(String errorNsg) {
         Log.i(TAG, "showError: " + errorNsg);
+    }
+
+    @Override
+    public void onClickListener(String mealId) {
+        SearchFragmentDirections.ActionSearchFragmentToMealDetailsFragment action = SearchFragmentDirections.actionSearchFragmentToMealDetailsFragment(mealId);
+        Navigation.findNavController(requireView()).navigate(action);
+    }
+
+    @Override
+    public void onClickCatListener(String category) {
+        searchPresenter.getFilteredMealsByCategory(category);
+    }
+
+    @Override
+    public void onClickIngListener(String ing) {
+        searchPresenter.getFilteredMealsByIngredient(ing);
+    }
+
+    @Override
+    public void onClickAreaListener(String area) {
+        searchPresenter.getFilteredMealsByCountry(area);
     }
 }

@@ -1,11 +1,10 @@
 package com.example.savor.search.presenter;
 
-import com.example.savor.remote.model.MealsCallBack;
-import com.example.savor.remote.model.MealsRepositoryImp;
-import com.example.savor.remote.model.pojo.AreaResponse;
-import com.example.savor.remote.model.pojo.CategoriesResponse;
-import com.example.savor.remote.model.pojo.FilteredResponse;
-import com.example.savor.remote.model.pojo.IngredientResponse;
+import com.example.savor.model.MealsRepositoryImp;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class SearchPresenterImp implements SearchPresenter {
     private static final String TAG = "SearchPresenterImp";
@@ -19,93 +18,82 @@ public class SearchPresenterImp implements SearchPresenter {
 
     @Override
     public void getAllCategories() {
-        mealsRepositoryImp.getAllCategories(new MealsCallBack<CategoriesResponse>() {
-            @Override
-            public void onSuccess(CategoriesResponse response) {
-                searchFragmentContract.showAllCategories(response);
-            }
+        Disposable subscribe = mealsRepositoryImp.getAllCategories()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(categoriesResponse -> {
+                    searchFragmentContract.showAllCategories(categoriesResponse);
+                }, throwable -> {
+                    searchFragmentContract.showError(throwable.getMessage());
+                });
 
-            @Override
-            public void onFailure(String errorMsg) {
-                searchFragmentContract.showError(errorMsg);
-            }
-        });
     }
 
     @Override
     public void getAllIngredient() {
-        mealsRepositoryImp.getAllIngredient(new MealsCallBack<IngredientResponse>() {
-            @Override
-            public void onSuccess(IngredientResponse response) {
-                searchFragmentContract.showAllIngredient(response);
-            }
+        Disposable subscribe = mealsRepositoryImp.getAllIngredient()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(ingredientResponse -> {
+                    searchFragmentContract.showAllIngredient(ingredientResponse);
+                }, throwable -> {
+                    searchFragmentContract.showError(throwable.getMessage());
+                });
 
-            @Override
-            public void onFailure(String errorMsg) {
-                searchFragmentContract.showError(errorMsg);
-            }
-        });
     }
 
     @Override
     public void getAllAreas() {
-        mealsRepositoryImp.getAllAreas(new MealsCallBack<AreaResponse>() {
-            @Override
-            public void onSuccess(AreaResponse response) {
-                searchFragmentContract.showAllAreas(response);
-            }
+        Disposable subscribe = mealsRepositoryImp.getAllAreas()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(areaResponse -> {
+                    searchFragmentContract.showAllAreas(areaResponse);
+                }, throwable -> {
+                    searchFragmentContract.showError(throwable.getMessage());
+                });
 
-            @Override
-            public void onFailure(String errorMsg) {
-                searchFragmentContract.showError(errorMsg);
-            }
-        });
     }
 
     @Override
     public void getFilteredMealsByCategory(String categoryName) {
-        mealsRepositoryImp.filterByCategory(categoryName, new MealsCallBack<FilteredResponse>() {
-            @Override
-            public void onSuccess(FilteredResponse response) {
-                searchFragmentContract.showFilteredMeals(response);
-            }
+        Disposable subscribe = mealsRepositoryImp.filterByCategory(categoryName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(filteredMeals -> {
+                    searchFragmentContract.showFilteredMeals(filteredMeals);
+                }, throwable -> {
+                    searchFragmentContract.showError(throwable.getMessage());
+                });
 
-            @Override
-            public void onFailure(String errorMsg) {
-                searchFragmentContract.showError(errorMsg);
-            }
-        });
     }
 
     @Override
     public void getFilteredMealsByIngredient(String ingredientName) {
-        mealsRepositoryImp.filterByIngredient(ingredientName, new MealsCallBack<FilteredResponse>() {
-            @Override
-            public void onSuccess(FilteredResponse response) {
-                searchFragmentContract.showFilteredMeals(response);
-            }
-
-            @Override
-            public void onFailure(String errorMsg) {
-                searchFragmentContract.showError(errorMsg);
-            }
-        });
+        Disposable subscribe = mealsRepositoryImp.filterByIngredient(ingredientName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(filteredMeals -> {
+                    searchFragmentContract.showFilteredMeals(filteredMeals);
+                }, throwable -> {
+                    searchFragmentContract.showError(throwable.getMessage());
+                });
+   
     }
 
     @Override
     public void getFilteredMealsByCountry(String countryName) {
-        mealsRepositoryImp.filterCountry(countryName, new MealsCallBack<FilteredResponse>() {
-            @Override
-            public void onSuccess(FilteredResponse response) {
-                searchFragmentContract.showFilteredMeals(response);
-            }
-
-            @Override
-            public void onFailure(String errorMsg) {
-                searchFragmentContract.showError(errorMsg);
-            }
-        });
+        mealsRepositoryImp.filterCountry(countryName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(filteredMeals -> {
+                    searchFragmentContract.showFilteredMeals(filteredMeals);
+                }, throwable -> {
+                    searchFragmentContract.showError(throwable.getMessage());
+                });
     }
+
+
 
 
 }

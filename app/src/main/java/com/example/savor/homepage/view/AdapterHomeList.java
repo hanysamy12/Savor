@@ -15,19 +15,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.savor.R;
-import com.example.savor.remote.model.pojo.MealsItem;
+import com.example.savor.model.pojo.MealsItem;
+import com.example.savor.search.presenter.OnClickMealListener;
 
 import java.util.List;
 
 public class AdapterHomeList extends RecyclerView.Adapter<AdapterHomeList.ViewHolder> {
     Context context;
     List<MealsItem> meals;
+    OnClickMealListener listener;
     private static final String TAG = "AdapterHomeList";
 
-    public AdapterHomeList(Context context, List<MealsItem> meals) {
+    public AdapterHomeList(Context context, List<MealsItem> meals,OnClickMealListener listener) {
         Log.i(TAG, "AdapterHomeList: ");
         this.context = context;
         this.meals = meals;
+        this.listener = listener;
     }
 
     @NonNull
@@ -49,7 +52,9 @@ public class AdapterHomeList extends RecyclerView.Adapter<AdapterHomeList.ViewHo
                         .fitCenter()
                         .placeholder(R.drawable.ic_app)
                         .error(R.drawable.ic_app)).into(holder.imgMealListHome);
-
+        holder.imgMealListHome.setOnClickListener(view -> {
+            listener.onClickListener(meals.get(position).getIdMeal());
+        });
     }
 
     @Override

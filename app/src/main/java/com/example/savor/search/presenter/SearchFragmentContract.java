@@ -1,9 +1,10 @@
 package com.example.savor.search.presenter;
 
-import com.example.savor.remote.model.pojo.AreaResponse;
-import com.example.savor.remote.model.pojo.CategoriesResponse;
-import com.example.savor.remote.model.pojo.FilteredResponse;
-import com.example.savor.remote.model.pojo.IngredientResponse;
+import com.example.savor.model.pojo.AreaResponse;
+import com.example.savor.model.pojo.CategoriesResponse;
+import com.example.savor.model.pojo.FilteredResponse;
+import com.example.savor.model.pojo.IngredientResponse;
+import com.example.savor.model.pojo.MealsItemResponse;
 
 public interface SearchFragmentContract {
     void showAllCategories(CategoriesResponse categoriesResponse);
