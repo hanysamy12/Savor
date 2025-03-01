@@ -60,7 +60,7 @@ public class LoginFragment extends Fragment implements LoginFragmentContract {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
-        clickableTxtCreateAccount = view.findViewById(R.id.clickableTxtSignIn);
+        clickableTxtCreateAccount = view.findViewById(R.id.clickableTxtSignUp);
         txtUseName = view.findViewById(R.id.txtEmailLogin);
         txtPassword = view.findViewById(R.id.txtPasswordLogin);
         skipLogin = view.findViewById(R.id.txtSkipLogin);
@@ -68,7 +68,9 @@ public class LoginFragment extends Fragment implements LoginFragmentContract {
         btnGoogle =view.findViewById(R.id.btnSignInTGoogle);
         loginProgressBar = view.findViewById(R.id.loginProgressBar);
         clickableTxtCreateAccount.setOnClickListener(view1 -> {
-            Navigation.findNavController(requireView()).navigate(R.id.signUpFragment);
+            Toast.makeText(requireContext(), "Create", Toast.LENGTH_SHORT).show();
+            NavController navController = Navigation.findNavController(requireView());
+            navController.navigate(R.id.signUpFragment);
         });
         skipLogin.setOnClickListener(view1 -> {
             NavController navController = Navigation.findNavController(requireView());
@@ -120,7 +122,7 @@ public class LoginFragment extends Fragment implements LoginFragmentContract {
         btnLogin.setVisibility(VISIBLE);
         loginProgressBar.setVisibility(INVISIBLE);
         Log.e(TAG, "onLoginFailure: "+errorMsg);
-      //  Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
     }
 
     private void togglePasswordVisibility() {

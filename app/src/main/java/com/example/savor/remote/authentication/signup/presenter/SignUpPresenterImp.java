@@ -1,6 +1,7 @@
 package com.example.savor.remote.authentication.signup.presenter;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -13,11 +14,13 @@ public class SignUpPresenterImp implements SignUpPresenter, AuthenticationCallBa
     SignUpFragmentContract signUpFragmentContract;
     Context context;
     SharedPreferences sharedPreferences;
+    Activity activity;
 
-    public SignUpPresenterImp(AuthenticationRepo authenticationRepo, SignUpFragmentContract signUpFragment, Context context) {
+    public SignUpPresenterImp(AuthenticationRepo authenticationRepo, SignUpFragmentContract signUpFragment, Context context, Activity activity) {
         this.authenticationRepo = authenticationRepo;
         this.signUpFragmentContract = signUpFragment;
         this.context = context;
+        this.activity = activity;
 
     }
 
@@ -39,5 +42,10 @@ public class SignUpPresenterImp implements SignUpPresenter, AuthenticationCallBa
     @Override
     public void signUp(String userName, String password) {
         authenticationRepo.signUp(userName, password, this);
+    }
+
+    @Override
+    public void signUpGoogle() {
+        authenticationRepo.googleLogin(activity,this);
     }
 }

@@ -31,15 +31,13 @@ public class MainActivity extends AppCompatActivity {
     public static final String PRES_NAME = "PREF";
     public static final String TODAY_MEAL_ID ="mealId";
     public static final String IS_ONLINE = "isOnline";
-
-
-    public static boolean isSplashed = false;
+    public static boolean isSplashed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
+        isSplashed = false;
         navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragmentContainerView);
         navController = navHostFragment.getNavController();

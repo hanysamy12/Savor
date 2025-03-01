@@ -59,7 +59,7 @@
         android:backgroundTint="@color/primary_color"
         android:text="@string/login"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/clickableTxtSignIn"
+        app:layout_constraintBottom_toTopOf="@+id/clickableTxtSignUp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -117,7 +117,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/clickableTxtSignIn"
+        android:id="@+id/clickableTxtSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
