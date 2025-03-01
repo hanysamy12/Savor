@@ -30,9 +30,9 @@ import com.example.savor.R;
 import com.example.savor.database.MealsLocalDataSource;
 import com.example.savor.homepage.presenter.HomeScreenContract;
 import com.example.savor.homepage.presenter.HomeScreenPresenterImp;
-import com.example.savor.model.MealsRemoteDataSource;
-import com.example.savor.model.MealsRepositoryImp;
-import com.example.savor.model.pojo.MealsItemResponse;
+import com.example.savor.remote.MealsRemoteDataSource;
+import com.example.savor.remote.MealsRepositoryImp;
+import com.example.savor.remote.pojo.MealsItemResponse;
 import com.example.savor.search.presenter.OnClickMealListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -85,21 +85,7 @@ public class HomeFragment extends Fragment implements HomeScreenContract, OnClic
         Animation cardAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.anim_home_card);
         cardViewHome.startAnimation(cardAnim);
 
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-        getView().setOnKeyListener( new View.OnKeyListener()
-        {
-            @Override
-            public boolean onKey( View v, int keyCode, KeyEvent event )
-            {
-                if( keyCode == KeyEvent.KEYCODE_BACK )
-                {
-                    requireActivity().finish();
-                    return true;
-                }
-                return false;
-            }
-        } );
+
     }
 
     @Override

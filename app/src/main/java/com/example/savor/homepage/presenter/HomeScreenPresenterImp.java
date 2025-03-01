@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.savor.MainActivity;
-import com.example.savor.model.MealsRepositoryImp;
+import com.example.savor.remote.MealsRepositoryImp;
 
 import java.util.Calendar;
 import java.util.Random;
@@ -87,8 +87,7 @@ public class HomeScreenPresenterImp implements HomeScreenPresenter {
         Random random = new Random();
         int rIndex = random.nextInt(charsList.length);
         String randomChar = charsList[rIndex];
-        String randomString = String.valueOf(randomChar);
-        mealsRepository.getMealsByChar(randomString)
+        mealsRepository.getMealsByChar(randomChar)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(meals -> {

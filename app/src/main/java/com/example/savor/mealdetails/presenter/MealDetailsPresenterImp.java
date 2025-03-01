@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.savor.MainActivity;
-import com.example.savor.model.MealsRepositoryImp;
-import com.example.savor.model.pojo.MealsItem;
+import com.example.savor.remote.MealsRepositoryImp;
+import com.example.savor.remote.pojo.MealsItem;
 
 import java.util.ArrayList;
 import java.util.List;

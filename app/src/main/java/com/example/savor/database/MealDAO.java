@@ -5,7 +5,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.savor.model.pojo.MealsItem;
+import com.example.savor.remote.pojo.MealsItem;
 
 import java.util.List;
 

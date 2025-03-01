@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.savor.remote.authentication.login.view.LoginFragment"
+        android:name="com.example.savor.auth.authentication.login.view.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login">
         <action
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.savor.remote.authentication.signup.view.SignUpFragment"
+        android:name="com.example.savor.auth.authentication.signup.view.SignUpFragment"
         android:label="SignUp"
         tools:layout="@layout/fragment_sign_up">
         <action
@@ -98,6 +98,8 @@
         tools:layout="@layout/fragment_settings" >
         <action
             android:id="@+id/action_settingsFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/settingsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

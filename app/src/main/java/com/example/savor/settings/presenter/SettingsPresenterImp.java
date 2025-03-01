@@ -6,8 +6,8 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.savor.MainActivity;
-import com.example.savor.remote.authentication.firestore.FireStore;
-import com.example.savor.remote.presenter.Authentication;
+import com.example.savor.auth.authentication.firestore.FireStore;
+import com.example.savor.auth.presenter.Authentication;
 
 public class SettingsPresenterImp implements SettingsPresenter {
     private static final String TAG = "SettingsPresenterImp";

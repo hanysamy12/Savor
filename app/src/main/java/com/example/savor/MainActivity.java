@@ -10,11 +10,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.savor.remote.authentication.firestore.FireStore;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 //userName honysamy@gmail.com
@@ -89,7 +87,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+       // MainActivity.isSplashed=true;
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MainActivity.isSplashed=true;
+    }
 
     @Override
     protected void onDestroy() {
