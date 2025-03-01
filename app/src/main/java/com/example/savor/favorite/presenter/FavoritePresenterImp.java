@@ -1,6 +1,6 @@
 package com.example.savor.favorite.presenter;
 
-import com.example.savor.model.MealsRepositoryImp;
+import com.example.savor.remote.MealsRepositoryImp;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 

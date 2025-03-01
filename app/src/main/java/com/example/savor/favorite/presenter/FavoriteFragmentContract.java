@@ -1,6 +1,6 @@
 package com.example.savor.favorite.presenter;
 
-import com.example.savor.model.pojo.MealsItem;
+import com.example.savor.remote.pojo.MealsItem;
 
 import java.util.List;
 

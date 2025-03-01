@@ -7,7 +7,7 @@
     android:backgroundTint="@color/background_color"
     android:elevation="2dp"
     android:background="@drawable/bg_rounded_rounded"
-    tools:context=".remote.authentication.login.view.LoginFragment">
+    tools:context=".auth.authentication.login.view.LoginFragment">
 
 
     <EditText
@@ -114,7 +114,9 @@
         app:layout_constraintBottom_toTopOf="@+id/btnLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtPasswordLogin"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/clickableTxtSignUp"

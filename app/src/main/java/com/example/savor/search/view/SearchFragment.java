@@ -20,15 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.savor.R;
 import com.example.savor.database.MealsLocalDataSource;
-import com.example.savor.model.MealsRemoteDataSource;
-import com.example.savor.model.MealsRepositoryImp;
-import com.example.savor.model.pojo.AreaResponse;
-import com.example.savor.model.pojo.CategoriesResponse;
-import com.example.savor.model.pojo.FilteredResponse;
-import com.example.savor.model.pojo.IngredientResponse;
-import com.example.savor.model.pojo.MealsFilteredItem;
-import com.example.savor.model.pojo.MealsItem;
-import com.example.savor.model.pojo.MealsItemResponse;
+import com.example.savor.remote.MealsRemoteDataSource;
+import com.example.savor.remote.MealsRepositoryImp;
+import com.example.savor.remote.pojo.AreaResponse;
+import com.example.savor.remote.pojo.CategoriesResponse;
+import com.example.savor.remote.pojo.FilteredResponse;
+import com.example.savor.remote.pojo.IngredientResponse;
 import com.example.savor.search.presenter.OnClickListenerArea;
 import com.example.savor.search.presenter.OnClickListenerCategory;
 import com.example.savor.search.presenter.OnClickListenerIngredient;
@@ -39,12 +36,12 @@ import com.example.savor.search.presenter.SearchPresenterImp;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
@@ -132,7 +129,7 @@ public class SearchFragment extends Fragment implements SearchFragmentContract
     public void showFilteredMeals(FilteredResponse filteredResponse) {
         layoutManager.setSpanCount(1);
         adapterSearchMeals = new AdapterSearchMeals(requireContext(), filteredResponse.getMealsFilteredItems(), this);
-        Observable.create(emitter -> {
+        Disposable subscribe = Observable.create(emitter -> {
                     txtSearch.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
@@ -150,27 +147,18 @@ public class SearchFragment extends Fragment implements SearchFragmentContract
                 }).debounce(1, TimeUnit.SECONDS)
                 .map(charSqence -> charSqence.toString().toLowerCase().trim())
                 .distinctUntilChanged()
-                .map(s -> {
-                    List<MealsFilteredItem> filteredMeals = new ArrayList<>();
-                    for (MealsFilteredItem meal : filteredResponse.getMealsFilteredItems())
-                    {
-                        if(meal.getStrMeal().toLowerCase().contains(s))
-                        {
-                            filteredMeals.add(meal);
-                        }
-                    }
-                    return filteredMeals;
-                }).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(mealsFilteredItems -> {
-                                    adapterSearchMeals.setSearchMealChanges(mealsFilteredItems);
-                                },throwable -> {
-                                    Log.i(TAG, "showFilteredMeals: Error "+throwable);
-                                });
+                .map(search -> filteredResponse.getMealsFilteredItems().stream()
+                        .filter(mealsFilteredItem -> mealsFilteredItem.getStrMeal().toLowerCase().contains(search))
+                        .collect(Collectors.toList()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mealsFilteredItems -> {
+                    adapterSearchMeals.setSearchMealChanges(mealsFilteredItems);
+                }, throwable -> {
+                    Log.i(TAG, "showFilteredMeals: Error " + throwable);
+                });
         recyclerView.setAdapter(adapterSearchMeals);
     }
-
-
 
 
     @Override

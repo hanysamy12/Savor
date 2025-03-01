@@ -21,9 +21,9 @@ import com.example.savor.database.MealsLocalDataSource;
 import com.example.savor.favorite.presenter.FavoriteFragmentContract;
 import com.example.savor.favorite.presenter.FavoritePresenterImp;
 import com.example.savor.favorite.presenter.OnClickListener;
-import com.example.savor.model.MealsRemoteDataSource;
-import com.example.savor.model.MealsRepositoryImp;
-import com.example.savor.model.pojo.MealsItem;
+import com.example.savor.remote.MealsRemoteDataSource;
+import com.example.savor.remote.MealsRepositoryImp;
+import com.example.savor.remote.pojo.MealsItem;
 
 import java.util.ArrayList;
 import java.util.List;

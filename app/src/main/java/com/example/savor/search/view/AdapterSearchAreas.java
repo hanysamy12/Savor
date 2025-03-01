@@ -17,10 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.savor.R;
-import com.example.savor.model.pojo.AreasItem;
+import com.example.savor.remote.pojo.AreasItem;
 import com.example.savor.search.presenter.OnClickListenerArea;
 import com.example.savor.search.presenter.SearchFragmentContract;
-import com.example.savor.search.presenter.SearchPresenterImp;
 
 import java.util.List;
 

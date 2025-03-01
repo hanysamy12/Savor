@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.savor.R;
 import com.example.savor.favorite.presenter.OnClickListener;
-import com.example.savor.model.pojo.MealsItem;
+import com.example.savor.remote.pojo.MealsItem;
 
 import java.util.List;
 
